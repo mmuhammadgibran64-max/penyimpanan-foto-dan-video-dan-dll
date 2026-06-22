@@ -1,279 +1,293 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Presensi Masuk Digital</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons for premium visual design -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        /* Custom smooth transition */
-        .transition-all-300 {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presensi Masuk Layanan</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4 relative overflow-x-hidden">
-    
-    <!-- Background Decorative Elements -->
-    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/10 blur-[120px] pointer-events-none"></div>
+<body class="bg-gradient-to-tr from-slate-100 via-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
 
-    <!-- Main Container Card -->
-    <div class="w-full max-w-md bg-slate-900/80 border border-slate-800 backdrop-blur-xl rounded-3xl p-8 shadow-2xl relative z-10 transition-all-300 hover:border-slate-700/80">
+  <div class="w-full max-w-md">
+    <!-- Card Utama -->
+    <div class="glass-effect rounded-3xl shadow-2xl border border-white/40 overflow-hidden transition-all duration-300">
+      
+      <!-- Bagian Header Visual -->
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-white relative overflow-hidden">
+        <!-- Dekorasi Latar Belakang -->
+        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-xl"></div>
+        <div class="absolute -left-10 -top-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-lg"></div>
         
-        <!-- App Header with real-time digital clock -->
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center p-3 bg-blue-500/10 text-blue-400 rounded-2xl mb-4 border border-blue-500/20">
-                <i data-lucide="log-in" class="w-8 h-8"></i>
-            </div>
-            <h1 class="text-2xl font-extrabold tracking-tight text-white mb-2">Presensi Masuk</h1>
-            <p class="text-slate-400 text-sm">Silakan masukkan data diri Anda untuk melakukan pencatatan jam masuk secara otomatis.</p>
-            
-            <!-- Real-time Digital Clock Display -->
-            <div class="mt-4 inline-block bg-slate-950/60 px-4 py-2 rounded-xl border border-slate-800/60">
-                <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span id="liveClock" class="font-mono text-sm font-semibold text-emerald-400">00:00:00</span>
-                    <span id="liveDate" class="text-xs text-slate-500 border-l border-slate-800 pl-2">22 Juni 2026</span>
-                </div>
-            </div>
+        <div class="relative z-10 flex flex-col items-center text-center">
+          <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-4 shadow-inner">
+            <i class="fa-solid fa-right-to-bracket text-3xl"></i>
+          </div>
+          <h1 class="text-2xl font-bold tracking-tight">Presensi Masuk</h1>
+          <p class="text-blue-100 text-sm mt-1">Silakan isi data diri Anda untuk mencatat jam masuk</p>
+        </div>
+      </div>
+
+      <!-- Bagian Form -->
+      <div class="p-8">
+        
+        <!-- Notifikasi Pesan (Sembunyi secara default) -->
+        <div id="notification-box" class="hidden mb-6 p-4 rounded-2xl flex items-start gap-3 transform translate-y-0 transition-all duration-300">
+          <div id="notification-icon" class="text-xl mt-0.5"></div>
+          <div class="flex-1">
+            <h4 id="notification-title" class="font-semibold text-sm"></h4>
+            <p id="notification-desc" class="text-xs mt-1"></p>
+          </div>
+          <button onclick="hideNotification()" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
 
-        <!-- Notification Message Box (No browser alert() used!) -->
-        <div id="toastBox" class="hidden mb-6 p-4 rounded-2xl border flex items-start gap-3 transition-all-300">
-            <div id="toastIconContainer" class="p-1 rounded-lg"></div>
-            <div class="flex-1">
-                <h4 id="toastTitle" class="text-sm font-bold"></h4>
-                <p id="toastMessage" class="text-xs mt-1 text-slate-300"></p>
+        <form id="attendance-form" class="space-y-5" onsubmit="handleSubmit(event)">
+          
+          <!-- Input Nama -->
+          <div>
+            <label for="nama" class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                <i class="fa-regular fa-user"></i>
+              </span>
+              <input 
+                type="text" 
+                id="nama" 
+                name="nama" 
+                required
+                placeholder="Masukkan nama lengkap Anda" 
+                class="w-full pl-11 pr-4 py-3 bg-white/60 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
             </div>
-            <button onclick="closeToast()" class="text-slate-400 hover:text-white transition-colors">
-                <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
-        </div>
+          </div>
 
-        <!-- Form Submission -->
-        <form id="attendanceForm" class="space-y-5">
-            <!-- Full Name Input -->
-            <div class="space-y-2">
-                <label for="nama" class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Nama Lengkap</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500">
-                        <i data-lucide="user" class="w-5 h-5"></i>
-                    </span>
-                    <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap Anda" 
-                        class="w-full pl-11 pr-4 py-3 bg-slate-950/50 border border-slate-800 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all duration-200">
-                </div>
+          <!-- Input Nomor HP -->
+          <div>
+            <label for="no_hp" class="block text-sm font-semibold text-slate-700 mb-2">Nomor HP</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                <i class="fa-solid fa-phone"></i>
+              </span>
+              <input 
+                type="tel" 
+                id="no_hp" 
+                name="no_hp" 
+                required
+                placeholder="Contoh: 081234567890" 
+                class="w-full pl-11 pr-4 py-3 bg-white/60 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
             </div>
+          </div>
 
-            <!-- Phone Number Input -->
-            <div class="space-y-2">
-                <label for="nomorHp" class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Nomor HP / WhatsApp</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500">
-                        <i data-lucide="phone" class="w-5 h-5"></i>
-                    </span>
-                    <input type="tel" id="nomorHp" name="nomorHp" required placeholder="Contoh: 081234567890" 
-                        class="w-full pl-11 pr-4 py-3 bg-slate-950/50 border border-slate-800 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all duration-200">
-                </div>
-                <p class="text-[10px] text-slate-500 italic pl-1">Gunakan nomor aktif untuk kemudahan validasi data.</p>
+          <!-- Input Jam Masuk -->
+          <div>
+            <label for="jam_masuk" class="block text-sm font-semibold text-slate-700 mb-2">Jam Masuk</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                <i class="fa-regular fa-clock"></i>
+              </span>
+              <input 
+                type="time" 
+                id="jam_masuk" 
+                name="jam_masuk" 
+                required
+                class="w-full pl-11 pr-4 py-3 bg-white/60 border border-slate-200 rounded-2xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
+              <button 
+                type="button" 
+                onclick="setCurrentTime()" 
+                title="Gunakan waktu sekarang"
+                class="absolute inset-y-0 right-0 flex items-center pr-4 text-blue-500 hover:text-blue-700 transition-colors"
+              >
+                <i class="fa-solid fa-rotate-left"></i>
+              </button>
             </div>
+            <p class="text-[11px] text-slate-500 mt-1.5 pl-1">
+              <i class="fa-solid fa-circle-info mr-1 text-blue-400"></i> Jam otomatis terisi dengan waktu saat ini.
+            </p>
+          </div>
 
-            <!-- Auto Generated Time Input (ReadOnly Showcase) -->
-            <div class="space-y-2">
-                <label for="displayJamMasuk" class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Jam Masuk (Otomatis)</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500">
-                        <i data-lucide="clock" class="w-5 h-5"></i>
-                    </span>
-                    <input type="text" id="displayJamMasuk" readonly 
-                        class="w-full pl-11 pr-4 py-3 bg-slate-950/20 border border-slate-800/40 rounded-2xl text-emerald-400 font-mono font-medium focus:outline-none cursor-not-allowed">
-                </div>
-                <!-- Hidden inputs to be sent to Google Sheets -->
-                <input type="hidden" id="jamMasuk" name="jamMasuk">
-                <input type="hidden" id="tanggalMasuk" name="tanggalMasuk">
-            </div>
+          <!-- Tombol Kirim / Submit -->
+          <button 
+            type="submit" 
+            id="btn-submit"
+            class="w-full mt-2 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2"
+          >
+            <span id="btn-text">Simpan & Masuk</span>
+            <span id="btn-spinner" class="hidden">
+              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </span>
+          </button>
 
-            <!-- Submit Button with Loading Indicator -->
-            <button type="submit" id="btnSubmit" 
-                class="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2 mt-6">
-                <span id="btnText">Kirim Presensi</span>
-                <span id="btnSpinner" class="hidden">
-                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </span>
-            </button>
         </form>
 
-        <!-- Footer Info -->
-        <div class="mt-8 pt-6 border-t border-slate-800 text-center">
-            <p class="text-xs text-slate-500 flex items-center justify-center gap-1.5">
-                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
-                Enkripsi Aman & Transmisi Langsung ke Sistem
-            </p>
-        </div>
+      </div>
     </div>
+    
+    <!-- Footer / Watermark -->
+    <p class="text-center text-slate-400 text-xs mt-6">
+      Sistem Presensi Mandiri &bull; Data disimpan secara aman
+    </p>
+  </div>
 
-    <!-- JavaScript logic -->
-    <script>
-        // Google Apps Script endpoint URL
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbxgKfbLXRWp1lRfdOtp5aR8oXDnZ9xtoB0rIZoaRLZwjBM98oTiwrJ4S0teNz_qex0k/exec';
+  <script>
+    // URL Google Apps Script yang diberikan
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbwBBOIqohufCfCsC9fO7RDHa_XNk3DzBGLEp6iAqvRZuaE7z8KUqhvl4Vk_budYESpk/exec";
 
-        // Initialize Lucide icons
-        lucide.createIcons();
+    // Set waktu default saat halaman dimuat
+    document.addEventListener("DOMContentLoaded", () => {
+      setCurrentTime();
+    });
 
-        // Elements
-        const liveClock = document.getElementById('liveClock');
-        const liveDate = document.getElementById('liveDate');
-        const displayJamMasuk = document.getElementById('displayJamMasuk');
-        const jamMasukHidden = document.getElementById('jamMasuk');
-        const tanggalMasukHidden = document.getElementById('tanggalMasuk');
-        
-        const form = document.getElementById('attendanceForm');
-        const btnSubmit = document.getElementById('btnSubmit');
-        const btnText = document.getElementById('btnText');
-        const btnSpinner = document.getElementById('btnSpinner');
-        
-        const toastBox = document.getElementById('toastBox');
-        const toastIconContainer = document.getElementById('toastIconContainer');
-        const toastTitle = document.getElementById('toastTitle');
-        const toastMessage = document.getElementById('toastMessage');
+    // Fungsi untuk mengisi jam masuk secara otomatis berdasarkan waktu lokal pengguna
+    function setCurrentTime() {
+      const timeInput = document.getElementById("jam_masuk");
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      timeInput.value = `${hours}:${minutes}`;
+    }
 
-        // Clock updater
-        function updateClock() {
-            const now = new Date();
-            
-            // Format Jam
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const timeString = `${hours}:${minutes}:${seconds}`;
-            
-            // Format Tanggal
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            const dateString = now.toLocaleDateString('id-ID', options);
-            
-            // Render to DOM
-            liveClock.textContent = timeString;
-            liveDate.textContent = dateString;
+    // Fungsi menyembunyikan kotak notifikasi
+    function hideNotification() {
+      const box = document.getElementById("notification-box");
+      box.classList.add("hidden");
+    }
 
-            // Update auto field preview & hidden fields
-            const currentTimeStr = `${hours}:${minutes}`;
-            displayJamMasuk.value = `${currentTimeStr} WIB`;
-            jamMasukHidden.value = timeString;
-            tanggalMasukHidden.value = dateString;
+    // Fungsi menampilkan notifikasi kustom
+    function showNotification(type, title, message) {
+      const box = document.getElementById("notification-box");
+      const icon = document.getElementById("notification-icon");
+      const tTitle = document.getElementById("notification-title");
+      const tDesc = document.getElementById("notification-desc");
+
+      // Reset style
+      box.className = "mb-6 p-4 rounded-2xl flex items-start gap-3 transform translate-y-0 transition-all duration-300";
+
+      if (type === "success") {
+        box.classList.add("bg-emerald-50", "text-emerald-800", "border", "border-emerald-200");
+        icon.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500"></i>';
+      } else if (type === "error") {
+        box.classList.add("bg-rose-50", "text-rose-800", "border", "border-rose-200");
+        icon.innerHTML = '<i class="fa-solid fa-circle-exclamation text-rose-500"></i>';
+      } else {
+        box.classList.add("bg-blue-50", "text-blue-800", "border", "border-blue-200");
+        icon.innerHTML = '<i class="fa-solid fa-circle-info text-blue-500"></i>';
+      }
+
+      tTitle.innerText = title;
+      tDesc.innerText = message;
+      box.classList.remove("hidden");
+      
+      // Auto scroll ke posisi notifikasi agar terlihat di layar kecil
+      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Penanganan saat tombol kirim ditekan
+    async function handleSubmit(event) {
+      event.preventDefault();
+
+      const form = document.getElementById("attendance-form");
+      const btnSubmit = document.getElementById("btn-submit");
+      const btnText = document.getElementById("btn-text");
+      const btnSpinner = document.getElementById("btn-spinner");
+
+      const nama = document.getElementById("nama").value.trim();
+      const no_hp = document.getElementById("no_hp").value.trim();
+      const jam_masuk = document.getElementById("jam_masuk").value;
+
+      // Animasi Loading
+      btnSubmit.disabled = true;
+      btnSubmit.classList.add("opacity-80", "cursor-not-allowed");
+      btnText.innerText = "Mengirim data...";
+      btnSpinner.classList.remove("hidden");
+      hideNotification();
+
+      // Struktur Data yang dikirim (Format URLSearchParams agar mudah ditangkap Google Sheets POST standard)
+      const dataToSend = new URLSearchParams();
+      dataToSend.append("nama", nama);
+      dataToSend.append("no_hp", no_hp);
+      dataToSend.append("jam_masuk", jam_masuk);
+
+      // Implementasi Retry dengan Exponential Backoff (Maksimum 5 kali percobaan)
+      let retries = 5;
+      let delay = 1000; // Mulai dari 1 detik
+      let success = false;
+
+      for (let i = 0; i < retries; i++) {
+        try {
+          // Mengirimkan data via POST ke Google Apps Script
+          const response = await fetch(scriptUrl, {
+            method: "POST",
+            mode: "no-cors", // Mode 'no-cors' sering dibutuhkan untuk Google Apps Script agar terhindar dari pemblokiran CORS browser lokal
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: dataToSend
+          });
+
+          // Mengingat mode 'no-cors' tidak mengembalikan respons yang bisa dibaca (opaque response),
+          // jika fetch tidak melempar error, kita asumsikan pengiriman berhasil diterima oleh server Google.
+          success = true;
+          break; // Keluar dari loop jika berhasil
+
+        } catch (error) {
+          if (i === retries - 1) {
+            console.error("Gagal mengirim setelah beberapa kali mencoba:", error);
+          } else {
+            // Tunggu sesuai delay sebelum mencoba kembali (exponential backoff)
+            await new Promise(resolve => setTimeout(resolve, delay));
+            delay *= 2; // gandakan waktu tunggu
+          }
         }
+      }
 
-        // Run clock every second
-        setInterval(updateClock, 1000);
-        updateClock(); // Initial run
+      // Selesai Loading
+      btnSubmit.disabled = false;
+      btnSubmit.classList.remove("opacity-80", "cursor-not-allowed");
+      btnText.innerText = "Simpan & Masuk";
+      btnSpinner.classList.add("hidden");
 
-        // Display Custom Toast Notification
-        function showToast(type, title, message) {
-            toastBox.className = "mb-6 p-4 rounded-2xl border flex items-start gap-3 transition-all-300 block";
-            
-            if (type === 'success') {
-                toastBox.classList.add('bg-emerald-500/10', 'border-emerald-500/20', 'text-emerald-400');
-                toastIconContainer.className = "p-1 rounded-lg bg-emerald-500/10 text-emerald-400";
-                toastIconContainer.innerHTML = '<i data-lucide="check-circle-2" class="w-5 h-5"></i>';
-            } else if (type === 'error') {
-                toastBox.classList.add('bg-rose-500/10', 'border-rose-500/20', 'text-rose-400');
-                toastIconContainer.className = "p-1 rounded-lg bg-rose-500/10 text-rose-400";
-                toastIconContainer.innerHTML = '<i data-lucide="alert-circle" class="w-5 h-5"></i>';
-            } else {
-                toastBox.classList.add('bg-blue-500/10', 'border-blue-500/20', 'text-blue-400');
-                toastIconContainer.className = "p-1 rounded-lg bg-blue-500/10 text-blue-400";
-                toastIconContainer.innerHTML = '<i data-lucide="info" class="w-5 h-5"></i>';
-            }
-
-            toastTitle.textContent = title;
-            toastMessage.textContent = message;
-            lucide.createIcons();
-            
-            // Auto hide toast after 8 seconds
-            setTimeout(() => {
-                closeToast();
-            }, 8000);
-        }
-
-        function closeToast() {
-            toastBox.classList.add('hidden');
-        }
-
-        // Form Submit Handler
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Set Loading state
-            btnSubmit.disabled = true;
-            btnText.textContent = "Mengirim...";
-            btnSpinner.classList.remove('hidden');
-            closeToast();
-
-            // Prepare Payload
-            const formData = {
-                nama: document.getElementById('nama').value.trim(),
-                nomorHp: document.getElementById('nomorHp').value.trim(),
-                jamMasuk: jamMasukHidden.value,
-                tanggalMasuk: tanggalMasukHidden.value
-            };
-
-            // Using fetch to POST/GET the data to Google Apps Script. 
-            // Note: Google Apps Script redirections require handling CORS properly, usually via GET with query string or standard POST with JSON/Form-urlencoded
-            try {
-                // Formatting payload as x-www-form-urlencoded to ensure standard Web App receivers parse it easily
-                const formBody = [];
-                for (const property in formData) {
-                    const encodedKey = encodeURIComponent(property);
-                    const encodedValue = encodeURIComponent(formData[property]);
-                    formBody.push(encodedKey + "=" + encodedValue);
-                }
-                const serializedBody = formBody.join("&");
-
-                // Execute Request
-                const response = await fetch(scriptUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                    },
-                    body: serializedBody,
-                    mode: 'no-cors' // Use 'no-cors' because GAS responses are redirected and usually cause CORS block even on successful writes.
-                });
-
-                // Since 'no-cors' doesn't allow reading response status/body directly (it returns opaque response), 
-                // we assume successful transfer if no network exception was thrown.
-                showToast(
-                    'success', 
-                    'Presensi Berhasil!', 
-                    'Data Nama: ' + formData.nama + ' pada jam ' + formData.jamMasuk + ' telah sukses terkirim ke penyimpanan.'
-                );
-                
-                // Reset form fields
-                form.reset();
-                updateClock();
-
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                showToast(
-                    'error', 
-                    'Gagal Mengirim Data', 
-                    'Terjadi kendala jaringan atau masalah sistem. Silakan coba beberapa saat lagi.'
-                );
-            } finally {
-                // Revert Loading State
-                btnSubmit.disabled = false;
-                btnText.textContent = "Kirim Presensi";
-                btnSpinner.classList.add('hidden');
-            }
-        });
-    </script>
+      if (success) {
+        showNotification(
+          "success", 
+          "Berhasil Terkirim!", 
+          `Terima kasih, ${nama}. Data presensi jam ${jam_masuk} Anda telah berhasil dicatat ke sistem penyimpanan.`
+        );
+        // Reset form input setelah sukses (kecuali jam yang akan diupdate ke waktu terbaru)
+        document.getElementById("nama").value = "";
+        document.getElementById("no_hp").value = "";
+        setCurrentTime();
+      } else {
+        showNotification(
+          "error", 
+          "Koneksi Gagal", 
+          "Terjadi masalah koneksi atau server saat mengirimkan data. Silakan coba kembali dalam beberapa saat."
+        );
+      }
+    }
+  </script>
 </body>
 </html>
