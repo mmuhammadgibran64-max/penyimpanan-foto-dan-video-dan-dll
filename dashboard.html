@@ -27,10 +27,12 @@ if(localStorage.getItem('presensi_login')!=='true'){location.href='index.html'}
 <p class="text-xs text-slate-500"><span id="user-nama">User</span> • <span id="file-count">0 file</span></p>
 </div>
 </div>
-<div class="flex gap-2">
+<div class="flex gap-2 items-center">
 <input type="file" id="fileInput" multiple hidden accept="*/*">
 <button onclick="document.getElementById('fileInput').click()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2"><i data-lucide="upload-cloud" class="w-4 h-4"></i> Upload Banyak</button>
-<button onclick="loadFiles()" class="bg-white border border-slate-200 p-2.5 rounded-xl"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
+<button onclick="loadFiles()" class="bg-white border border-slate-200 p-2.5 rounded-xl hover:bg-slate-50"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
+<!-- BUTTON KELUAR BARU -->
+<button onclick="logout()" class="bg-white border border-slate-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 p-2.5 rounded-xl flex items-center gap-2 font-bold text-sm"><i data-lucide="log-out" class="w-5 h-5"></i><span class="hidden md:inline">Keluar</span></button>
 </div>
 </div>
 <!-- Progress -->
@@ -46,14 +48,13 @@ if(localStorage.getItem('presensi_login')!=='true'){location.href='index.html'}
 <div id="loading" class="py-20 text-center text-sm text-slate-500">Memuat file...</div>
 </main>
 
-<!-- MODAL PREVIEW - TOMBOL DI ATAS BIAR KELIATAN -->
+<!-- MODAL PREVIEW -->
 <div id="preview-modal" class="fixed inset-0 bg-black/90 z-50 hidden">
 <div class="w-full h-full flex flex-col">
-<!-- BAR ATAS - TOMBOL SELALU KELIATAN -->
 <div class="bg-white px-4 py-3 flex items-center justify-between gap-3 shrink-0">
 <div class="min-w-0 flex-1">
 <p id="preview-name" class="font-bold text-sm truncate"></p>
-<p id="preview-size" class="text- text-slate-500"></p>
+<p id="preview-size" class="text-xs text-slate-500"></p>
 </div>
 <div class="flex items-center gap-2 shrink-0">
 <a id="preview-download" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Download</a>
@@ -61,7 +62,6 @@ if(localStorage.getItem('presensi_login')!=='true'){location.href='index.html'}
 <button onclick="closePreview()" class="bg-slate-100 hover:bg-slate-200 p-2.5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
 </div>
 </div>
-<!-- ISI FOTO/VIDEO -->
 <div id="preview-content" class="flex-1 flex items-center justify-center p-2 overflow-auto"></div>
 </div>
 </div>
@@ -103,7 +103,6 @@ async function loadFiles(){
   }finally{loading.classList.add('hidden');}
 }
 
-// UPLOAD BANYAK SEKALIGUS - PILIH BANYAK FILE
 fileInput.addEventListener('change',async(e)=>{
   const files=[...e.target.files];
   if(!files.length) return;
@@ -157,6 +156,17 @@ function openPreview(f){
   lucide.createIcons();
 }
 function closePreview(){document.getElementById('preview-modal').classList.add('hidden');}
+
+// FUNGSI LOGOUT / KELUAR
+function logout(){
+  if(confirm('Yakin mau keluar? Kamu harus presensi lagi untuk masuk.')){
+    localStorage.removeItem('presensi_login');
+    localStorage.removeItem('presensi_nama');
+    localStorage.removeItem('presensi_hp');
+    localStorage.removeItem('presensi_jam');
+    window.location.href='index.html';
+  }
+}
 
 loadFiles();
 </script>
