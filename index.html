@@ -4,30 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Presensi & Login Masuk</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between antialiased selection:bg-indigo-500 selection:text-white">
-
-    <!-- Header / Navbar -->
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between antialiased">
     <header class="w-full bg-white border-b border-slate-100 py-4 px-6 sticky top-0 z-50 shadow-sm backdrop-blur-md bg-white/90">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <div class="p-2 bg-indigo-600 rounded-xl text-white shadow-md shadow-indigo-100">
-                    <i data-lucide="log-in" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold text-slate-900 tracking-tight">Presensi Hub</h1>
-                    <p class="text-xs text-slate-500 font-medium">Sistem Pencatatan Masuk Digital</p>
-                </div>
+                <div class="p-2 bg-indigo-600 rounded-xl text-white shadow-md shadow-indigo-100"><i data-lucide="log-in" class="w-6 h-6"></i></div>
+                <div><h1 class="text-lg font-bold text-slate-900 tracking-tight">Presensi Hub</h1><p class="text-xs text-slate-500 font-medium">Sistem Pencatatan Masuk Digital</p></div>
             </div>
             <div id="realtime-clock" class="text-right hidden sm:block">
                 <p class="text-sm font-semibold text-slate-800" id="current-date">Memuat Tanggal...</p>
@@ -36,385 +25,111 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        <!-- Left Side: Login Form -->
         <div class="lg:col-span-5 bg-white rounded-3xl p-6 md:p-8 border border-slate-100 shadow-xl shadow-slate-100/50">
             <div class="mb-6">
                 <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-semibold tracking-wide uppercase">Formulir Masuk</span>
                 <h2 class="text-2xl font-bold text-slate-900 mt-2">Silakan Isi Presensi</h2>
-                <p class="text-sm text-slate-500 mt-1">Data Anda akan disimpan secara langsung ke Google Sheets Anda.</p>
+                <p class="text-sm text-slate-500 mt-1">Isi presensi untuk masuk ke Dashboard Utama.</p>
             </div>
-
             <form id="attendance-form" class="space-y-5">
-                <!-- Nama Input -->
                 <div>
-                    <label for="nama" class="block text-sm font-semibold text-slate-700 mb-1.5">Nama Lengkap</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Nama Lengkap</label>
                     <div class="relative rounded-2xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                            <i data-lucide="user" class="w-5 h-5"></i>
-                        </div>
-                        <input type="text" name="nama" id="nama" required placeholder="Masukkan nama lengkap Anda" 
-                               class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all text-sm font-medium">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400"><i data-lucide="user" class="w-5 h-5"></i></div>
+                        <input type="text" name="nama" id="nama" required placeholder="Masukkan nama lengkap Anda" class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all text-sm font-medium">
                     </div>
                 </div>
-
-                <!-- Nomor HP Input -->
                 <div>
-                    <label for="nomorHp" class="block text-sm font-semibold text-slate-700 mb-1.5">Nomor Handphone</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Nomor Handphone</label>
                     <div class="relative rounded-2xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                            <i data-lucide="phone" class="w-5 h-5"></i>
-                        </div>
-                        <input type="tel" name="nomorHp" id="nomorHp" required placeholder="Contoh: 081234567890" 
-                               class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all text-sm font-medium">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400"><i data-lucide="phone" class="w-5 h-5"></i></div>
+                        <input type="tel" name="nomorHp" id="nomorHp" required placeholder="Contoh: 081234567890" class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all text-sm font-medium">
                     </div>
-                    <p class="text-xs text-slate-400 mt-1">Masukkan nomor handphone aktif Anda.</p>
                 </div>
-
-                <!-- Jam Masuk Input -->
                 <div>
-                    <label for="jamMasuk" class="block text-sm font-semibold text-slate-700 mb-1.5">Waktu Masuk</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Waktu Masuk</label>
                     <div class="relative rounded-2xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                            <i data-lucide="clock" class="w-5 h-5"></i>
-                        </div>
-                        <input type="text" name="jamMasuk" id="jamMasuk" readonly
-                               class="block w-full pl-11 pr-4 py-3.5 bg-slate-100 border border-slate-200 rounded-2xl text-slate-600 font-mono font-medium focus:outline-none cursor-not-allowed text-sm">
-                        <button type="button" id="sync-time-btn" title="Sinkronisasi ulang waktu" 
-                                class="absolute right-3 top-2.5 p-1 bg-white hover:bg-slate-50 rounded-lg text-slate-400 hover:text-indigo-600 transition-colors border border-slate-100">
-                            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                        </button>
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400"><i data-lucide="clock" class="w-5 h-5"></i></div>
+                        <input type="text" name="jamMasuk" id="jamMasuk" readonly class="block w-full pl-11 pr-12 py-3.5 bg-slate-100 border border-slate-200 rounded-2xl text-slate-600 font-mono font-medium focus:outline-none cursor-not-allowed text-sm">
+                        <button type="button" id="sync-time-btn" class="absolute right-3 top-2.5 p-1 bg-white hover:bg-slate-50 rounded-lg text-slate-400 hover:text-indigo-600 transition-colors border border-slate-100"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
                     </div>
-                    <p class="text-xs text-slate-400 mt-1">Waktu terisi otomatis sesuai dengan jam perangkat Anda.</p>
                 </div>
-
-                <!-- Submit Button -->
-                <button type="submit" id="submit-btn" 
-                        class="w-full flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-3.5 px-4 rounded-2xl transition-all duration-150 shadow-lg shadow-indigo-100 hover:shadow-indigo-200 transform active:scale-[0.98]">
-                    <span id="btn-text">Kirim Presensi</span>
-                    <span id="btn-loader" class="hidden">
-                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                    </span>
-                    <i data-lucide="send" id="btn-icon" class="w-5 h-5"></i>
+                <button type="submit" id="submit-btn" class="w-full flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 px-4 rounded-2xl transition-all shadow-lg shadow-indigo-100">
+                    <span id="btn-text">Kirim & Masuk Dashboard</span>
+                    <span id="btn-loader" class="hidden"><svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></span>
+                    <i data-lucide="arrow-right" id="btn-icon" class="w-5 h-5"></i>
                 </button>
             </form>
         </div>
-
-        <!-- Right Side: Info & Sesi History -->
         <div class="lg:col-span-7 space-y-6">
-            <!-- Information Banner -->
-            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-6 text-white shadow-xl shadow-indigo-100/40 relative overflow-hidden">
-                <div class="absolute right-0 bottom-0 opacity-10 translate-y-10 translate-x-10">
-                    <i data-lucide="shield-check" class="w-64 h-64"></i>
-                </div>
-                <div class="relative z-10">
-                    <h3 class="text-xl font-bold mb-2">Integrasi Google Sheets Berhasil</h3>
-                    <p class="text-sm text-indigo-100 leading-relaxed mb-4">
-                        Formulir ini mengirimkan parameter <b>nama</b>, <b>nomorHp</b>, dan <b>jamMasuk</b> secara langsung ke Google Apps Script Anda.
-                    </p>
-                    <div class="flex items-center space-x-4 text-xs font-semibold bg-white/15 py-2 px-3 rounded-xl w-fit">
-                        <span class="flex h-2 w-2 relative">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        <span>Endpoint: Web App Google Script</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- History Section -->
-            <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl shadow-slate-100/50">
-                <div class="flex justify-between items-center mb-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-900">Riwayat Masuk Sesi Ini</h3>
-                        <p class="text-xs text-slate-400">Daftar presensi yang Anda lakukan di peramban ini</p>
-                    </div>
-                    <button id="clear-history" class="text-xs text-slate-400 hover:text-red-500 transition-colors font-semibold flex items-center space-x-1">
-                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                        <span>Bersihkan</span>
-                    </button>
-                </div>
-
-                <!-- Empty State -->
-                <div id="empty-history" class="py-12 flex flex-col items-center justify-center text-slate-400 border-2 border-dashed border-slate-100 rounded-2xl">
-                    <i data-lucide="inbox" class="w-12 h-12 stroke-1 mb-3 text-slate-300"></i>
-                    <p class="text-sm font-medium">Belum ada riwayat pengiriman.</p>
-                </div>
-
-                <!-- History List -->
-                <div id="history-list" class="space-y-3 max-h-[300px] overflow-y-auto hidden">
-                    <!-- Items will be injected dynamically -->
-                </div>
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10"><h3 class="text-xl font-bold mb-2">Akses Aman ke Dashboard</h3><p class="text-sm text-indigo-100 leading-relaxed">Setelah presensi, kamu akan diarahkan otomatis ke <b>Unlimited Drive Dashboard</b> yang ada di file terpisah.</p></div>
             </div>
         </div>
     </main>
 
-    <!-- Success / Error Status Modal -->
-    <div id="status-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform scale-95 transition-transform duration-300">
-            <div id="modal-icon-container" class="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4">
-                <!-- Icon will be injected -->
-            </div>
-            <h4 id="modal-title" class="text-xl font-bold text-slate-900 text-center">Judul Pesan</h4>
-            <p id="modal-message" class="text-slate-500 text-sm text-center mt-2 leading-relaxed">Isi pesan konfirmasi pengiriman akan dimuat di sini secara detail.</p>
-            <div class="mt-6 flex space-x-3">
-                <button id="modal-close" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 px-4 rounded-xl transition-colors">
-                    Selesai
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="w-full bg-slate-900 text-slate-400 py-6 px-6 mt-12 border-t border-slate-800">
-        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center text-sm">
-            <p class="mb-4 sm:mb-0">&copy; 2026 Presensi Hub. Hak Cipta Dilindungi.</p>
-            <div class="flex space-x-6">
-                <span class="flex items-center space-x-1.5 text-xs text-emerald-400 font-medium">
-                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
-                    <span>Database Sinkron</span>
-                </span>
-            </div>
-        </div>
-    </footer>
+    <div id="status-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"><div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl"><div id="modal-icon-container" class="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-emerald-50 text-emerald-600"><i data-lucide="check-circle" class="w-10 h-10"></i></div><h4 id="modal-title" class="text-xl font-bold text-slate-900 text-center"></h4><p id="modal-message" class="text-slate-500 text-sm text-center mt-2"></p><button id="modal-close" class="w-full mt-6 bg-slate-900 text-white font-semibold py-3 px-4 rounded-xl">Lanjut ke Dashboard</button></div></div>
 
     <script>
-        // Google Script URL dari pengguna
         const scriptURL = 'https://script.google.com/macros/s/AKfycbw6ll7Xr7TCOZcN5y0wkjlikPDwXtwWaDlHC08BtJOzQWHZRiWaxuDS8tkt16jtzfxi/exec';
-
-        // Elements
         const form = document.getElementById('attendance-form');
         const inputJamMasuk = document.getElementById('jamMasuk');
         const submitBtn = document.getElementById('submit-btn');
         const btnText = document.getElementById('btn-text');
         const btnLoader = document.getElementById('btn-loader');
         const btnIcon = document.getElementById('btn-icon');
-        const syncTimeBtn = document.getElementById('sync-time-btn');
-        const historyList = document.getElementById('history-list');
-        const emptyHistory = document.getElementById('empty-history');
-        const clearHistoryBtn = document.getElementById('clear-history');
         const statusModal = document.getElementById('status-modal');
-        const modalIconContainer = document.getElementById('modal-icon-container');
         const modalTitle = document.getElementById('modal-title');
         const modalMessage = document.getElementById('modal-message');
         const modalClose = document.getElementById('modal-close');
 
-        // Clock elements
-        const currentTimeEl = document.getElementById('current-time');
-        const currentDateEl = document.getElementById('current-date');
-
-        // Real-time Clock Initialization
-        function updateClock() {
-            const now = new Date();
-            
-            // Format time: HH:MM:SS
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            currentTimeEl.textContent = `${hours}:${minutes}:${seconds} WIB`;
-
-            // Format date Indonesian
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            currentDateEl.textContent = now.toLocaleDateString('id-ID', options);
+        // Cek jika sudah login, langsung lempar ke dashboard.html
+        if(localStorage.getItem('presensi_login') === 'true'){
+            window.location.href = 'dashboard.html';
         }
-        setInterval(updateClock, 1000);
-        updateClock();
 
-        // Update Automatic Jam Masuk input field
-        function syncJamMasuk() {
+        function updateClock(){
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            
-            // Format YYYY-MM-DD HH:MM:SS
-            const dateStr = now.getFullYear() + '-' + 
-                            String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                            String(now.getDate()).padStart(2, '0');
-            
-            inputJamMasuk.value = `${dateStr} ${hours}:${minutes}:${seconds}`;
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('id-ID') + ' WIB';
+            document.getElementById('current-date').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const dateStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+            const timeStr = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+            inputJamMasuk.value = `${dateStr} ${timeStr}`;
         }
-        syncJamMasuk();
-        
-        syncTimeBtn.addEventListener('click', () => {
-            syncJamMasuk();
-            const syncIcon = syncTimeBtn.querySelector('i');
-            syncIcon.classList.add('animate-spin');
-            setTimeout(() => syncIcon.classList.remove('animate-spin'), 600);
-        });
-
-        // Initialize Lucide Icons
+        setInterval(updateClock, 1000); updateClock();
         lucide.createIcons();
 
-        // Session History State
-        let sessionLogs = [];
-
-        // Load logs from sessionStorage if any
-        if (sessionStorage.getItem('attendanceLogs')) {
-            sessionLogs = JSON.parse(sessionStorage.getItem('attendanceLogs'));
-            renderHistory();
-        }
-
-        // Handle Form Submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            // Set loading state
-            submitBtn.disabled = true;
-            btnText.textContent = "Mengirim...";
-            btnLoader.classList.remove('hidden');
-            btnIcon.classList.add('hidden');
-
+            submitBtn.disabled = true; btnText.textContent = "Mengirim..."; btnLoader.classList.remove('hidden'); btnIcon.classList.add('hidden');
             const namaValue = document.getElementById('nama').value.trim();
             const nomorHpValue = document.getElementById('nomorHp').value.trim();
             const jamMasukValue = inputJamMasuk.value;
-
-            // Form data mapping matching the Apps Script expectation
             const formData = new URLSearchParams();
-            formData.append('nama', namaValue);
-            formData.append('nomorHp', nomorHpValue);
-            formData.append('jamMasuk', jamMasukValue);
-
+            formData.append('nama', namaValue); formData.append('nomorHp', nomorHpValue); formData.append('jamMasuk', jamMasukValue);
             try {
-                // Mengirimkan POST ke Google Apps Script
-                await fetch(scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Mencegah pemblokiran CORS oleh browser saat memproses redirect 302 dari Google Apps Script
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: formData
-                });
+                await fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: formData });
 
-                // Menyiapkan data riwayat
-                const successData = {
-                    nama: namaValue,
-                    nomorHp: nomorHpValue,
-                    jamMasuk: jamMasukValue,
-                    timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-                };
+                // SIMPAN SESSION LOGIN
+                localStorage.setItem('presensi_login', 'true');
+                localStorage.setItem('presensi_nama', namaValue);
+                localStorage.setItem('presensi_hp', nomorHpValue);
+                localStorage.setItem('presensi_jam', jamMasukValue);
 
-                // Menyimpan ke riwayat sesi aktif
-                sessionLogs.unshift(successData);
-                sessionStorage.setItem('attendanceLogs', JSON.stringify(sessionLogs));
-                renderHistory();
-
-                // Menampilkan Modal Sukses
-                showModal(
-                    true,
-                    "Presensi Berhasil Terkirim!",
-                    `Terima kasih <b>${namaValue}</b>, data presensi Anda pada jam <b>${jamMasukValue}</b> telah berhasil dikirim ke database Google Sheets Anda.`
-                );
-
-                // Reset isian formulir
-                form.reset();
-                syncJamMasuk();
-
+                statusModal.classList.remove('hidden');
+                modalTitle.innerHTML = "Presensi Berhasil!";
+                modalMessage.innerHTML = `Halo <b>${namaValue}</b>, kamu akan diarahkan ke Dashboard Utama.`;
+                lucide.createIcons();
             } catch (error) {
-                console.error('Error!', error.message);
-                showModal(
-                    false,
-                    "Pengiriman Gagal",
-                    "Terjadi kesalahan koneksi saat mencoba mengirim data. Pastikan jaringan internet Anda aktif lalu silakan coba kembali."
-                );
-            } finally {
-                // Mengembalikan state tombol kirim
-                submitBtn.disabled = false;
-                btnText.textContent = "Kirim Presensi";
-                btnLoader.classList.add('hidden');
-                btnIcon.classList.remove('hidden');
+                alert("Gagal kirim, cek koneksi internet.");
+                submitBtn.disabled = false; btnText.textContent = "Kirim & Masuk Dashboard"; btnLoader.classList.add('hidden'); btnIcon.classList.remove('hidden');
             }
         });
 
-        // Show Modal Dialog
-        function showModal(isSuccess, title, message) {
-            statusModal.classList.remove('hidden');
-            setTimeout(() => {
-                statusModal.classList.remove('opacity-0');
-                statusModal.querySelector('div').classList.remove('scale-95');
-            }, 50);
-
-            modalTitle.innerHTML = title;
-            modalMessage.innerHTML = message;
-
-            if (isSuccess) {
-                modalIconContainer.className = "mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-emerald-50 text-emerald-600";
-                modalIconContainer.innerHTML = `<i data-lucide="check-circle" class="w-10 h-10"></i>`;
-            } else {
-                modalIconContainer.className = "mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-rose-50 text-rose-600";
-                modalIconContainer.innerHTML = `<i data-lucide="alert-triangle" class="w-10 h-10"></i>`;
-            }
-            lucide.createIcons();
-        }
-
-        // Close Modal
         modalClose.addEventListener('click', () => {
-            statusModal.classList.add('opacity-0');
-            statusModal.querySelector('div').classList.add('scale-95');
-            setTimeout(() => {
-                statusModal.classList.add('hidden');
-            }, 300);
+            window.location.href = 'dashboard.html'; // INI KUNCI FILE TERPISAH
         });
-
-        // Render History List
-        function renderHistory() {
-            if (sessionLogs.length === 0) {
-                historyList.classList.add('hidden');
-                emptyHistory.classList.remove('hidden');
-                return;
-            }
-
-            emptyHistory.classList.add('hidden');
-            historyList.classList.remove('hidden');
-            historyList.innerHTML = '';
-
-            sessionLogs.forEach((log) => {
-                const item = document.createElement('div');
-                item.className = "p-4 bg-slate-50 border border-slate-100 rounded-2xl flex items-start justify-between hover:bg-slate-100/70 transition-all";
-                item.innerHTML = `
-                    <div class="flex space-x-3 items-start">
-                        <div class="p-2 bg-indigo-100 text-indigo-700 rounded-xl mt-0.5">
-                            <i data-lucide="user-check" class="w-4 h-4"></i>
-                        </div>
-                        <div>
-                            <h5 class="text-sm font-bold text-slate-800">${escapeHTML(log.nama)}</h5>
-                            <p class="text-xs text-slate-500 font-medium">HP: ${escapeHTML(log.nomorHp)}</p>
-                            <p class="text-[10px] text-indigo-600 font-mono mt-1">${log.jamMasuk}</p>
-                        </div>
-                    </div>
-                    <span class="text-[11px] bg-indigo-50 text-indigo-700 font-bold px-2 py-1 rounded-lg">
-                        ${log.timestamp}
-                    </span>
-                `;
-                historyList.appendChild(item);
-            });
-            lucide.createIcons();
-        }
-
-        // Clear History Local
-        clearHistoryBtn.addEventListener('click', () => {
-            sessionLogs = [];
-            sessionStorage.removeItem('attendanceLogs');
-            renderHistory();
-        });
-
-        // Simple helper to prevent HTML Injection
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag] || tag)
-            );
-        }
     </script>
 </body>
 </html>
