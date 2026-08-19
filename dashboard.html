@@ -1,86 +1,203 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unlimited Drive - Connected</title>
-<script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/lucide@latest"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unlimited Drive - V5 Anti Lag</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#f8fafc}
 .grid-files{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
 </style>
 <script>if(localStorage.getItem('presensi_login')!=='true'){location.href='index.html'}</script>
 </head>
 <body class="min-h-screen">
+
 <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b p-4">
-<div class="max-w-7xl mx-auto flex justify-between items-center">
+<div class="max-w-7xl mx-auto flex justify-between items-center gap-3">
 <div class="flex items-center gap-3">
-<div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white"><i data-lucide="hard-drive" class="w-5 h-5"></i></div>
-<div><h1 class="font-extrabold leading-none">Unlimited Drive</h1><p class="text-xs text-slate-500"><span id="user-nama">User</span> • <span id="file-count">0 file</span> • <span class="text-emerald-600 font-bold">Anti Lag ON</span></p></div>
-</div>
-<div class="flex gap-2 items-center">
-<input type="file" id="fileInput" multiple hidden accept="*/*">
-<button onclick="document.getElementById('fileInput').click()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2"><i data-lucide="upload-cloud" class="w-4 h-4"></i> Upload Banyak</button>
-<button onclick="loadFiles()" class="bg-white border p-2.5 rounded-xl"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
-<button onclick="logout()" class="bg-white border hover:bg-rose-50 hover:text-rose-600 p-2.5 rounded-xl flex items-center gap-2 font-bold text-sm"><i data-lucide="log-out" class="w-5 h-5"></i><span class="hidden md:inline">Keluar</span></button>
+<div class="w-10 h-10 bg-indigo-600 rounded-xl grid place-items-center text-white"><i data-lucide="hard-drive" class="w-5 h-5"></i></div>
+<div>
+<h1 class="font-extrabold leading-none">Unlimited Drive V5</h1>
+<p class="text-xs text-slate-500"><span id="user-nama">Gibran</span> • <span id="file-count">0</span> file • <span class="text-emerald-600 font-bold">Connected</span></p>
 </div>
 </div>
-<div id="progress-wrap" class="max-w-7xl mx-auto mt-3 hidden"><div class="bg-slate-200 rounded-full h-2.5 overflow-hidden"><div id="progress-bar" class="bg-indigo-600 h-2.5 w-0 transition-all"></div></div><p id="progress-text" class="text-xs font-bold text-indigo-600 mt-1"></p></div>
+<div class="flex items-center gap-2">
+<input type="file" id="fileInput" multiple hidden accept="image/*,video/*,*/*">
+<button onclick="document.getElementById('fileInput').click()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2"><i data-lucide="upload-cloud" class="w-4 h-4"></i> Upload (Tetap Jalan)</button>
+<button onclick="loadFiles()" class="bg-white border p-2.5 rounded-xl hover:bg-slate-50"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
+<button onclick="logout()" class="bg-white border p-2.5 rounded-xl hover:bg-rose-50 hover:text-rose-600"><i data-lucide="log-out" class="w-5 h-5"></i></button>
+</div>
+</div>
+
+<!-- QUEUE BACKGROUND -->
+<div id="queue-panel" class="max-w-7xl mx-auto mt-3 hidden">
+<div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-4">
+<div class="flex justify-between items-center mb-2">
+<p class="font-extrabold text-sm text-indigo-800"><span id="queue-count">0</span> file antri - tetap upload walau keluar!</p>
+<button onclick="clearQueue()" class="text-xs font-bold text-rose-600 bg-white border px-3 py-1 rounded-full">Batal</button>
+</div>
+<div class="bg-white rounded-full h-3 overflow-hidden"><div id="queue-bar" class="bg-indigo-600 h-3 w-0 transition-all duration-300"></div></div>
+<p id="queue-text" class="text-xs font-bold text-indigo-600 mt-2"></p>
+<div id="queue-list" class="mt-3 max-h-32 overflow-auto text- space-y-1 bg-white rounded-xl p-2 border"></div>
+</div>
+</div>
 </header>
-<main class="max-w-7xl mx-auto p-4"><div id="file-grid" class="grid-files"></div><div id="empty" class="hidden py-20 text-center"><i data-lucide="inbox" class="w-12 h-12 mx-auto text-slate-300 mb-3"></i><p class="text-sm text-slate-500">Belum ada file</p></div><div id="loading" class="py-20 text-center text-sm text-slate-500">Memuat 319 file (mode unlimited anti lag)...</div></main>
-<div id="preview-modal" class="fixed inset-0 bg-black/90 z-50 hidden"><div class="w-full h-full flex flex-col"><div class="bg-white px-4 py-3 flex items-center justify-between gap-3 shrink-0"><div class="min-w-0 flex-1"><p id="preview-name" class="font-bold text-sm truncate"></p><p id="preview-size" class="text-xs text-slate-500"></p></div><div class="flex items-center gap-2 shrink-0"><a id="preview-download" target="_blank" class="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Download</a><button id="preview-delete" class="bg-rose-50 text-rose-600 p-2.5 rounded-xl"><i data-lucide="trash-2" class="w-5 h-5"></i></button><button onclick="closePreview()" class="bg-slate-100 p-2.5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button></div></div><div id="preview-content" class="flex-1 flex items-center justify-center p-2 overflow-auto"></div></div></div>
+
+<main class="max-w-7xl mx-auto p-4">
+<div id="file-grid" class="grid-files"></div>
+<div id="loading" class="py-20 text-center"><div class="inline-flex items-center gap-2 text-sm text-slate-500"><i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Memuat unlimited file...</div></div>
+<div id="empty" class="hidden py-20 text-center"><i data-lucide="inbox" class="w-12 h-12 mx-auto text-slate-300 mb-3"></i><p class="text-sm text-slate-500">Belum ada file, upload dulu bro!</p></div>
+</main>
+
+<!-- PREVIEW MODAL -->
+<div id="preview-modal" class="fixed inset-0 bg-black/90 z-50 hidden">
+<div class="w-full h-full flex flex-col">
+<div class="bg-white px-4 py-3 flex items-center justify-between gap-3">
+<div class="min-w-0 flex-1"><p id="preview-name" class="font-bold text-sm truncate"></p><p id="preview-size" class="text-xs text-slate-500"></p></div>
+<div class="flex items-center gap-2 shrink-0">
+<a id="preview-download" target="_blank" class="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Download</a>
+<button id="preview-delete" class="bg-rose-50 text-rose-600 p-2.5 rounded-xl hover:bg-rose-100"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+<button onclick="closePreview()" class="bg-slate-100 p-2.5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
+</div>
+</div>
+<div id="preview-content" class="flex-1 flex items-center justify-center p-3 overflow-auto"></div>
+</div>
+</div>
+
 <script>
+// === LINK KAMU YANG UDAH SUCCESS TADI ===
 const API_URL = "https://script.google.com/macros/s/AKfycbywqzjiQ1SiXUmSxTSsM1xUcM7uvBQs-kDp-y1wv4Zz9TcP6kDcsOaEcudl4Xvxf0-bAg/exec";
-let allFiles=[];const fileInput=document.getElementById('fileInput');const grid=document.getElementById('file-grid');const loading=document.getElementById('loading');const empty=document.getElementById('empty');
-document.getElementById('user-nama').textContent=localStorage.getItem('presensi_nama')||'Muhammad Gibran';lucide.createIcons();
-async function loadFiles(){
-  loading.classList.remove('hidden');loading.textContent='Memuat...';grid.innerHTML='';
-  try{
-    const res=await fetch(API_URL + "?t=" + Date.now());
-    const data=await res.json();
-    if(data.status==='error'){throw new Error(data.message);}
-    allFiles=data.files||[];document.getElementById('file-count').textContent=allFiles.length+' file';
-    if(allFiles.length===0){empty.classList.remove('hidden');}else{empty.classList.add('hidden');}
-    grid.innerHTML='';
-    allFiles.forEach(f=>{
-      const isImage=f.mimeType.includes('image');const isVideo=f.mimeType.includes('video');
-      const thumb=`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`;
-      const div=document.createElement('div');div.className='bg-white rounded-2xl border overflow-hidden cursor-pointer hover:shadow-lg transition-all';
-      div.innerHTML=`<div class="h-40 bg-slate-100 flex items-center justify-center overflow-hidden">${isImage?`<img src="${thumb}" loading="lazy" class="w-full h-full object-cover">`:isVideo?`<div class="relative w-full h-full"><img src="${thumb}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-black/30 grid place-items-center"><i data-lucide="play-circle" class="w-10 h-10 text-white"></i></div></div>`:`<i data-lucide="file" class="w-8 h-8 text-slate-400"></i>`}</div><div class="p-2.5"><p class="font-bold text-xs truncate">${f.name}</p><p class="text- text-slate-400 mt-1">${(f.size/1024/1024).toFixed(2)} MB</p></div>`;
-      div.onclick=()=>openPreview(f);grid.appendChild(div);
-    });lucide.createIcons();
-  }catch(e){grid.innerHTML=`<p class="col-span-full text-center text-rose-500 text-sm">Gagal: ${e.message}<br>Pastikan Deploy -> Anyone</p>`;}
-  finally{loading.classList.add('hidden');}
+
+let allFiles = [];
+let uploadQueue = JSON.parse(localStorage.getItem('unlimited_queue') || '[]');
+let isUploading = false;
+
+const fileInput = document.getElementById('fileInput');
+const grid = document.getElementById('file-grid');
+const loading = document.getElementById('loading');
+const empty = document.getElementById('empty');
+
+document.getElementById('user-nama').textContent = localStorage.getItem('presensi_nama') || 'Gibran';
+lucide.createIcons();
+
+function saveQueue(){ localStorage.setItem('unlimited_queue', JSON.stringify(uploadQueue)); }
+
+function updateQueueUI(){
+  const panel = document.getElementById('queue-panel');
+  if(uploadQueue.length === 0){ panel.classList.add('hidden'); return; }
+  panel.classList.remove('hidden');
+  document.getElementById('queue-count').textContent = uploadQueue.length;
+  document.getElementById('queue-list').innerHTML = uploadQueue.map((f,i)=>`<div class="flex justify-between ${f.status==='done'?'text-emerald-600':f.status==='error'?'text-rose-600':f.status==='uploading'?'text-indigo-600 font-bold':''}"><span>${i+1}. ${f.name} - ${f.status}</span><span>${f.progress||0}%</span></div>`).join('');
 }
-fileInput.addEventListener('change',async(e)=>{
-  const files=[...e.target.files];if(!files.length)return;
-  const wrap=document.getElementById('progress-wrap');const bar=document.getElementById('progress-bar');const txt=document.getElementById('progress-text');
-  wrap.classList.remove('hidden');bar.style.width='0%';const fd=new FormData();
-  for(let i=0;i<files.length;i++){
-    txt.textContent=`Membaca ${i+1}/${files.length}: ${files[i].name}`;bar.style.width=Math.round((i/files.length)*50)+'%';
-    const b64=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(files[i]);});
-    fd.append('files',b64.split(',')[1]);fd.append('filenames',files[i].name);fd.append('mimetypes',files[i].type||'application/octet-stream');
+
+async function loadFiles(){
+  loading.classList.remove('hidden'); grid.innerHTML=''; empty.classList.add('hidden');
+  try{
+    const res = await fetch(API_URL + "?t=" + Date.now());
+    const data = await res.json();
+    if(data.status === 'error') throw new Error(data.message);
+    allFiles = data.files || [];
+    document.getElementById('file-count').textContent = data.total || allFiles.length;
+    if(allFiles.length === 0){ empty.classList.remove('hidden'); }
+    grid.innerHTML = '';
+    allFiles.forEach(f=>{
+      const isImage = f.mimeType.includes('image');
+      const isVideo = f.mimeType.includes('video');
+      const thumb = `https://drive.google.com/thumbnail?id=${f.id}&sz=w400`;
+      const div = document.createElement('div');
+      div.className = 'bg-white rounded-2xl border overflow-hidden cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all';
+      div.innerHTML = `<div class="h-40 bg-slate-100 flex items-center justify-center overflow-hidden relative">${isImage?`<img src="${thumb}" loading="lazy" class="w-full h-full object-cover">`:isVideo?`<div class="relative w-full h-full"><img src="${thumb}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-black/30 grid place-items-center"><i data-lucide="play-circle" class="w-10 h-10 text-white"></i></div></div>`:`<i data-lucide="file" class="w-8 h-8 text-slate-400"></i>`}</div><div class="p-2.5"><p class="font-bold text-xs truncate">${f.name}</p><p class="text- text-slate-400 mt-1">${(f.size/1024/1024).toFixed(2)} MB</p></div>`;
+      div.onclick = ()=>openPreview(f);
+      grid.appendChild(div);
+    });
+    lucide.createIcons();
+  }catch(e){
+    grid.innerHTML = `<p class="col-span-full text-center text-rose-500 text-sm p-10">Gagal load: ${e.message}<br>Pastikan Deploy -> Anyone</p>`;
+  }finally{ loading.classList.add('hidden'); }
+}
+
+// UPLOAD QUEUE - TETAP JALAN WALAU KELUAR
+fileInput.addEventListener('change', async (e)=>{
+  const files = [...e.target.files];
+  if(files.length === 0) return;
+
+  for(const file of files){
+    uploadQueue.push({ name: file.name, size: file.size, type: file.type||'application/octet-stream', status: 'antri', progress: 0, base64: null });
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      const item = uploadQueue.find(x=>x.name===file.name && x.status==='antri' &&!x.base64);
+      if(item){ item.base64 = ev.target.result.split(',')[1]; item.status='siap'; saveQueue(); updateQueueUI(); processQueue(); }
+    };
+    reader.readAsDataURL(file);
   }
-  txt.textContent=`Mengupload ${files.length} file...`;bar.style.width='80%';
-  try{await fetch(API_URL,{method:'POST',body:fd,mode:'no-cors'});bar.style.width='100%';txt.textContent=`Berhasil ${files.length} file!`;fileInput.value='';setTimeout(()=>{wrap.classList.add('hidden');loadFiles();},1500);}catch(err){alert('Gagal: '+err);wrap.classList.add('hidden');}
+  fileInput.value=''; updateQueueUI(); saveQueue();
 });
+
+async function processQueue(){
+  if(isUploading) return;
+  const next = uploadQueue.find(x=>x.status==='siap');
+  if(!next){ updateQueueUI(); return; }
+
+  isUploading = true; next.status='uploading'; updateQueueUI();
+  document.getElementById('queue-text').textContent = `Mengupload ${next.name}... (jangan tutup, biarin jalan di background)`;
+
+  try{
+    const fd = new FormData();
+    fd.append('files', next.base64);
+    fd.append('filenames', next.name);
+    fd.append('mimetypes', next.type);
+
+    await fetch(API_URL, { method:'POST', body: fd, mode:'no-cors' });
+
+    next.status='done'; next.progress=100; next.base64=null;
+    document.getElementById('queue-bar').style.width='100%';
+    document.getElementById('queue-text').textContent=`Berhasil: ${next.name}`;
+    saveQueue();
+
+    setTimeout(()=>{
+      uploadQueue = uploadQueue.filter(x=>x.status!=='done');
+      saveQueue(); updateQueueUI(); loadFiles();
+      isUploading = false; processQueue();
+    }, 1000);
+
+  }catch(err){
+    next.status='error'; document.getElementById('queue-text').textContent=`Gagal ${next.name}, coba lagi 3 detik...`;
+    saveQueue(); isUploading=false;
+    setTimeout(()=>{ next.status='siap'; processQueue(); }, 3000);
+  }
+}
+
+function clearQueue(){ if(confirm('Batal semua antrian?')){ uploadQueue=[]; saveQueue(); updateQueueUI(); isUploading=false; } }
+
 function openPreview(f){
   document.getElementById('preview-modal').classList.remove('hidden');
   document.getElementById('preview-name').textContent=f.name;
   document.getElementById('preview-size').textContent=(f.size/1024/1024).toFixed(2)+' MB';
   document.getElementById('preview-download').href=`https://drive.google.com/uc?export=download&id=${f.id}`;
   document.getElementById('preview-delete').onclick=()=>{
-    if(confirm('Hapus '+f.name+'?')){const d=new FormData();d.append('action','delete');d.append('id',f.id);fetch(API_URL,{method:'POST',body:d,mode:'no-cors'}).then(()=>{closePreview();setTimeout(loadFiles,1000);});}
+    if(confirm('Hapus '+f.name+'?')){ const d=new FormData(); d.append('action','delete'); d.append('id',f.id); fetch(API_URL,{method:'POST',body:d,mode:'no-cors'}).then(()=>{closePreview(); setTimeout(loadFiles,1500);}); }
   };
-  const c=document.getElementById('preview-content');const viewUrl=`https://lh3.googleusercontent.com/d/${f.id}`;
-  if(f.mimeType.includes('image'))c.innerHTML=`<img src="${viewUrl}" class="max-w-full max-h- object-contain rounded-xl">`;
-  else if(f.mimeType.includes('video'))c.innerHTML=`<video src="${viewUrl}" controls autoplay class="max-w-full max-h- rounded-xl bg-black"></video>`;
-  else c.innerHTML=`<div class="bg-white rounded-2xl p-8 text-center"><p class="font-bold">${f.name}</p></div>`;
+  const c=document.getElementById('preview-content'); const url=`https://lh3.googleusercontent.com/d/${f.id}`;
+  if(f.mimeType.includes('image')) c.innerHTML=`<img src="${url}" class="max-w-full max-h- object-contain rounded-2xl">`;
+  else if(f.mimeType.includes('video')) c.innerHTML=`<video src="${url}" controls autoplay class="max-w-full max-h- rounded-2xl bg-black"></video>`;
+  else c.innerHTML=`<div class="bg-white rounded-2xl p-10 text-center"><i data-lucide="file" class="w-10 h-10 mx-auto text-slate-300 mb-3"></i><p class="font-bold">${f.name}</p><a href="https://drive.google.com/uc?export=download&id=${f.id}" class="mt-3 inline-block bg-indigo-600 text-white px-5 py-2 rounded-xl text-sm font-bold">Download</a></div>`;
   lucide.createIcons();
 }
-function closePreview(){document.getElementById('preview-modal').classList.add('hidden');}
-function logout(){if(confirm('Keluar?')){localStorage.clear();location.href='index.html';}}
-loadFiles();
+function closePreview(){ document.getElementById('preview-modal').classList.add('hidden'); }
+function logout(){ if(confirm('Keluar? Antrian upload tetap kesimpan kok!')){ localStorage.removeItem('presensi_login'); location.href='index.html'; } }
+
+// START
+updateQueueUI(); loadFiles(); if(uploadQueue.some(x=>x.status==='siap')) processQueue();
+
+// Warning kalau masih ada antrian pas keluar
+window.addEventListener('beforeunload', (e)=>{
+  if(uploadQueue.some(x=>x.status==='siap' || x.status==='uploading')){
+    e.preventDefault(); e.returnValue='Masih ada upload, kalau keluar nanti lanjut otomatis pas dibuka lagi ya bro!';
+  }
+});
 </script>
 </body>
 </html>
