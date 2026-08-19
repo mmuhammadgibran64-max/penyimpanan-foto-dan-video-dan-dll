@@ -1,53 +1,106 @@
 <!DOCTYPE html>
-<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Unlimited Drive V5 - Fixed</title><script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/lucide@latest"></script><style>body{font-family:sans-serif;background:#f8fafc}.grid-files{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}</style><script>if(localStorage.getItem('presensi_login')!=='true'){location.href='index.html'}</script></head><body>
-<header class="sticky top-0 z-30 bg-white border-b p-4"><div class="max-w-7xl mx-auto flex justify-between items-center"><div class="flex gap-3 items-center"><div class="w-10 h-10 bg-indigo-600 rounded-xl grid place-items-center text-white"><i data-lucide="hard-drive"></i></div><div><h1 class="font-extrabold">Unlimited Drive V5 Fixed</h1><p class="text-xs text-slate-500"><span id="file-count">0</span> file • <span id="status" class="text-emerald-600 font-bold">Loading...</span></p></div></div><div class="flex gap-2"><input type="file" id="fileInput" multiple hidden><button onclick="fileInput.click()" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm">Upload (Tetap Jalan)</button><button onclick="loadFiles()" class="bg-white border p-2.5 rounded-xl"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button></div></div><div id="queue-panel" class="max-w-7xl mx-auto mt-3 hidden"><div class="bg-indigo-50 border border-indigo-200 rounded-xl p-3"><p id="queue-text" class="text-sm font-bold text-indigo-700"></p><div class="bg-white rounded-full h-2 mt-2"><div id="queue-bar" class="bg-indigo-600 h-2 w-0"></div></div></div></div></header>
-<main class="max-w-7xl mx-auto p-4"><div id="file-grid" class="grid-files"></div><div id="loading" class="py-20 text-center text-sm text-slate-500">Memuat 319 file...</div></main>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unlimited Drive V6 - HP Version</title>
+<script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/lucide@latest"></script>
+<style>body{font-family:sans-serif;background:#f8fafc}.grid-files{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}</style>
+<script>if(localStorage.getItem('presensi_login')!=='true'){location.href='index.html'}</script>
+</head>
+<body class="min-h-screen">
+<header class="sticky top-0 z-30 bg-white border-b p-3">
+<div class="max-w-7xl mx-auto flex justify-between items-center">
+<div class="flex gap-2 items-center"><div class="w-9 h-9 bg-indigo-600 rounded-xl grid place-items-center text-white"><i data-lucide="hard-drive" class="w-5 h-5"></i></div><div><h1 class="font-extrabold text-sm leading-none">Unlimited Drive V6</h1><p class="text- text-slate-500"><span id="file-count">0</span> file • <span id="status" class="text-emerald-600 font-bold">Connected</span></p></div></div>
+<div class="flex gap-2 items-center">
+<input type="file" id="fileInput" multiple hidden accept="image/*,video/*,*/*">
+<button onclick="document.getElementById('fileInput').click()" class="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-1"><i data-lucide="upload-cloud" class="w-4 h-4"></i> Pilih Banyak Foto/Video HP</button>
+<button onclick="loadFiles()" class="bg-white border p-2 rounded-xl"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+<button onclick="logout()" class="bg-rose-50 text-rose-600 border border-rose-200 px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar</button>
+</div>
+</div>
+<div id="queue-panel" class="max-w-7xl mx-auto mt-3 hidden"><div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-3"><div class="flex justify-between items-center"><p class="font-extrabold text-sm text-amber-800"><span id="queue-num">0</span> file antri - TETAP JALAN WALAU KELUAR APLIKASI!</p><button onclick="clearQueue()" class="text-xs bg-white border px-3 py-1 rounded-full font-bold">Hapus Antrian</button></div><div class="bg-white rounded-full h-4 mt-2 border overflow-hidden"><div id="queue-bar" class="bg-indigo-600 h-4 w-0 transition-all"></div></div><p id="queue-text" class="text-xs font-bold text-indigo-700 mt-2"></p><p class="text- text-slate-500 mt-1">Jangan hapus browser. Biarin aja, keluar pun nanti lanjut otomatis.</p></div></div>
+</header>
+<main class="max-w-7xl mx-auto p-3"><div id="file-grid" class="grid-files"></div><div id="loading" class="py-20 text-center text-sm text-slate-500">Memuat...</div><div id="empty" class="hidden py-20 text-center text-sm text-slate-500">Belum ada file. Pilih foto/video HP di atas.</div></main>
+
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbywqzjiQ1SiXUmSxTSsM1xUcM7uvBQs-kDp-y1wv4Zz9TcP6kDcsOaEcudl4Xvxf0-bAg/exec";
-let allFiles=[]; let uploadQueue=JSON.parse(localStorage.getItem('unlimited_queue')||'[]'); let isUploading=false;
-const fileInput=document.getElementById('fileInput'), grid=document.getElementById('file-grid'), loading=document.getElementById('loading');
 
-function saveQueue(){localStorage.setItem('unlimited_queue',JSON.stringify(uploadQueue));}
+// === INDEXEDDB BIAR GAK RESET PAS KELUAR ===
+let db;
+function openDB(){ return new Promise((res,rej)=>{ const r=indexedDB.open('UnlimitedDriveV6',1); r.onupgradeneeded=e=>{ e.target.result.createObjectStore('queue',{keyPath:'id'}); }; r.onsuccess=e=>{db=e.target.result; res();}; r.onerror=()=>rej(); });}
+function addToQueue(file){ return new Promise(r=>{ const tx=db.transaction('queue','readwrite'); tx.objectStore('queue').put({id:Date.now()+Math.random(),name:file.name,size:file.size,type:file.type,blob:file,status:'siap'}); tx.oncomplete=()=>r(); });}
+function getAllQueue(){ return new Promise(r=>{ const tx=db.transaction('queue','readonly'); const req=tx.objectStore('queue').getAll(); req.onsuccess=()=>r(req.result); });}
+function deleteQueue(id){ return new Promise(r=>{ const tx=db.transaction('queue','readwrite'); tx.objectStore('queue').delete(id); tx.oncomplete=()=>r(); });}
+function clearDB(){ return new Promise(r=>{ const tx=db.transaction('queue','readwrite'); tx.objectStore('queue').clear(); tx.oncomplete=()=>r(); });}
 
-function loadFiles(){
-  document.getElementById('status').textContent='Loading...'; loading.classList.remove('hidden'); grid.innerHTML='';
-  const s=document.createElement('script');
-  const cb='cb_'+Date.now();
-  window[cb]=function(data){
-    try{
-      if(data.status==='error') throw new Error(data.message);
-      allFiles=data.files||[]; document.getElementById('file-count').textContent=data.total;
-      document.getElementById('status').textContent='Connected - '+data.total+' files';
-      grid.innerHTML='';
-      allFiles.forEach(f=>{
-        const thumb=`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`;
-        const d=document.createElement('div'); d.className='bg-white rounded-2xl border overflow-hidden cursor-pointer hover:shadow';
-        d.innerHTML=`<div class="h-40 bg-slate-100"><img src="${thumb}" loading="lazy" class="w-full h-full object-cover"></div><div class="p-2"><p class="text-xs font-bold truncate">${f.name}</p><p class="text- text-slate-400">${(f.size/1024/1024).toFixed(2)} MB</p></div>`;
-        d.onclick=()=>{window.open(`https://drive.google.com/uc?export=view&id=${f.id}`,'_blank');};
-        grid.appendChild(d);
-      });
-    }catch(e){ grid.innerHTML=`<p class="text-center text-rose-500">Gagal: ${e.message}</p>`; }
-    loading.classList.add('hidden'); delete window[cb]; s.remove();
-  };
-  s.src=API_URL+"?callback="+cb+"&t="+Date.now();
-  s.onerror=function(){ document.getElementById('status').textContent='Failed, coba refresh'; loading.classList.add('hidden'); };
-  document.body.appendChild(s);
+let isUploading=false;
+const fileInput=document.getElementById('fileInput'), grid=document.getElementById('file-grid'), loading=document.getElementById('loading'), empty=document.getElementById('empty');
+
+function updateQueueUI(q){
+  const panel=document.getElementById('queue-panel');
+  if(!q || q.length===0){ panel.classList.add('hidden'); return; }
+  panel.classList.remove('hidden'); document.getElementById('queue-num').textContent=q.length;
 }
 
+async function loadFiles(){
+  loading.classList.remove('hidden'); grid.innerHTML=''; empty.classList.add('hidden');
+  const cb='cb_'+Date.now();
+  const s=document.createElement('script');
+  window[cb]=function(data){
+    loading.classList.add('hidden');
+    if(data.status==='error'){ grid.innerHTML=`<p class="text-center text-rose-500 text-sm">${data.message}</p>`; return; }
+    document.getElementById('file-count').textContent=data.total; document.getElementById('status').textContent='Connected '+data.total+' file';
+    if(data.files.length===0) empty.classList.remove('hidden');
+    grid.innerHTML=''; data.files.forEach(f=>{
+      const d=document.createElement('div'); d.className='bg-white rounded-2xl border overflow-hidden';
+      d.innerHTML=`<div class="h-36 bg-slate-100"><img src="https://drive.google.com/thumbnail?id=${f.id}&sz=w400" loading="lazy" class="w-full h-full object-cover"></div><div class="p-2"><p class="text- font-bold truncate">${f.name}</p><p class="text- text-slate-400">${(f.size/1024/1024).toFixed(1)}MB</p><div class="flex gap-1 mt-1"><a href="https://drive.google.com/uc?export=download&id=${f.id}" target="_blank" class="text- bg-indigo-50 text-indigo-600 px-2 py-1 rounded-full font-bold">Download</a><button onclick="hapusFile('${f.id}')" class="text- bg-rose-50 text-rose-600 px-2 py-1 rounded-full font-bold">Hapus</button></div></div>`;
+      grid.appendChild(d);
+    });
+    delete window[cb]; s.remove(); lucide.createIcons();
+  };
+  s.src=API_URL+"?callback="+cb+"&t="+Date.now(); document.body.appendChild(s);
+}
+
+async function hapusFile(id){ if(!confirm('Hapus file ini?')) return; const fd=new FormData(); fd.append('action','delete'); fd.append('id',id); await fetch(API_URL,{method:'POST',body:fd,mode:'no-cors'}); setTimeout(loadFiles,1500); }
+
 fileInput.addEventListener('change', async(e)=>{
-  const files=[...e.target.files]; if(!files.length) return;
+  const files=[...e.target.files]; if(files.length===0) return;
+  await openDB();
   document.getElementById('queue-panel').classList.remove('hidden');
-  for(let i=0;i<files.length;i++){
-    const file=files[i]; document.getElementById('queue-text').textContent=`Upload ${i+1}/${files.length}: ${file.name} - tetap jalan walau keluar`;
-    document.getElementById('queue-bar').style.width=((i/files.length)*100)+'%';
-    const b64=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(file);});
-    const fd=new FormData(); fd.append('files',b64); fd.append('filenames',file.name); fd.append('mimetypes',file.type);
-    await fetch(API_URL,{method:'POST',body:fd,mode:'no-cors'});
-    await new Promise(r=>setTimeout(r,800));
-  }
-  document.getElementById('queue-text').textContent=`Selesai ${files.length} file!`; document.getElementById('queue-bar').style.width='100%';
-  setTimeout(()=>{document.getElementById('queue-panel').classList.add('hidden'); loadFiles();},1500);
+  document.getElementById('queue-text').textContent=`Menyimpan ${files.length} file ke antrian HP...`;
+  for(const f of files){ await addToQueue(f); }
+  const q=await getAllQueue(); updateQueueUI(q);
+  fileInput.value=''; processQueue();
 });
 
-loadFiles(); lucide.createIcons();
-</script></body></html>
+async function processQueue(){
+  if(isUploading) return; await openDB(); let q=await getAllQueue(); if(q.length===0){ updateQueueUI([]); return; }
+  const next=q.find(x=>x.status==='siap'); if(!next) return;
+  isUploading=true; updateQueueUI(q);
+  document.getElementById('queue-text').textContent=`Mengupload ${next.name} (${(next.size/1024/1024).toFixed(1)}MB)... ${q.length} file sisa. Boleh keluar, nanti lanjut otomatis!`;
+  document.getElementById('queue-bar').style.width='10%';
+
+  try{
+    // Convert blob ke base64 pelan-pelan biar gak lag HP
+    const b64=await new Promise(res=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result.split(',')[1]); fr.readAsDataURL(next.blob); });
+    document.getElementById('queue-bar').style.width='50%';
+    const fd=new FormData(); fd.append('files',b64); fd.append('filenames',next.name); fd.append('mimetypes',next.type);
+    await fetch(API_URL,{method:'POST',body:fd,mode:'no-cors'});
+    await deleteQueue(next.id);
+    document.getElementById('queue-bar').style.width='100%';
+    document.getElementById('queue-text').textContent=`Berhasil ${next.name}!`;
+    const newQ=await getAllQueue(); updateQueueUI(newQ); setTimeout(loadFiles,1000);
+  }catch(err){
+    document.getElementById('queue-text').textContent=`Gagal ${next.name}, coba lagi 3 detik...`;
+    await new Promise(r=>setTimeout(r,3000));
+  }
+  isUploading=false; setTimeout(processQueue,1200);
+}
+
+function clearQueue(){ if(confirm('Hapus semua antrian di HP?')){ clearDB().then(()=>{ updateQueueUI([]); document.getElementById('queue-bar').style.width='0%'; }); } }
+function logout(){ if(confirm('Keluar? Antrian tetap aman di HP kok, nanti lanjut pas login lagi!')){ localStorage.removeItem('presensi_login'); location.href='index.html'; } }
+
+(async()=>{ await openDB(); const q=await getAllQueue(); updateQueueUI(q); loadFiles(); if(q.length>0) processQueue(); lucide.createIcons(); })();
+</script>
+</body>
+</html>
