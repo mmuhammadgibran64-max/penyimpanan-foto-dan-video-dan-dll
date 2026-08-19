@@ -1,38 +1,163 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Unlimited Drive - Connected</title>
-<script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/lucide@latest"></script>
-<style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');body{font-family:'Plus Jakarta Sans',sans-serif;background:#f8fafc}.preview-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));display:grid;gap:16px}</style>
-<script>if(localStorage.getItem('presensi_login')!=='true'){location.href='index.html'}</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f8fafc}
+.grid-files{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+</style>
+<script>
+// Harus login dari index.html dulu
+if(localStorage.getItem('presensi_login')!=='true'){location.href='index.html'}
+</script>
 </head>
 <body class="min-h-screen">
-<header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b p-4"><div class="max-w-7xl mx-auto flex justify-between items-center"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white"><i data-lucide="hard-drive"></i></div><div><h1 class="font-extrabold text-xl leading-none">Unlimited Drive</h1><p class="text-xs text-slate-500 mt-1"><span id="user-nama"></span> • <span id="file-count">0 file</span> • <span class="text-emerald-600 font-bold">● Terhubung</span></p></div></div><div class="flex gap-2"><input type="file" id="fileInput" multiple hidden><button onclick="document.getElementById('fileInput').click()" class="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2"><i data-lucide="upload-cloud" class="w-5 h-5"></i> Upload Banyak</button><button onclick="loadFiles()" class="bg-white border p-3 rounded-2xl"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button></div></div><div id="progress-wrap" class="max-w-7xl mx-auto mt-4 hidden"><div class="bg-slate-200 rounded-full h-3 overflow-hidden"><div id="progress-bar" class="bg-indigo-600 h-3 w-0 transition-all"></div></div><p id="progress-text" class="text-xs font-bold text-indigo-600 mt-2"></p></div></header>
-<div class="max-w-7xl mx-auto p-4 md:p-6"><div id="file-grid" class="preview-grid"></div><div id="empty" class="hidden py-24 text-center"><i data-lucide="inbox" class="w-16 h-16 mx-auto text-slate-300 mb-4"></i><p class="text-slate-500">Belum ada file</p></div><div id="loading" class="py-20 text-center"><p>Memuat...</p></div></div>
-
-<!-- MODAL FIX 100% TOMBOL KELIHATAN -->
-<div id="preview-modal" class="fixed inset-0 bg-black/85 z-50 hidden flex items-center justify-center p-3">
-<div class="bg-white rounded-3xl max-w-5xl w-full h- md:h- flex flex-col shadow-2xl">
-<div class="p-4 border-b flex justify-between items-center shrink-0"><div class="min-w-0 flex-1"><h3 id="preview-name" class="font-bold truncate"></h3><p id="preview-size" class="text-xs text-slate-400"></p></div><button onclick="closePreview()" class="ml-3 p-2 bg-slate-100 rounded-full"><i data-lucide="x"></i></button></div>
-<div id="preview-content" class="flex-1 overflow-auto bg-[#0f172a] flex items-center justify-center p-2"></div>
-<div class="p-4 bg-white border-t flex gap-3 shrink-0">
-<a id="preview-download" target="_blank" class="flex-1 bg-indigo-600 text-white text-center py-4 rounded-xl font-bold flex items-center justify-center gap-2"><i data-lucide="download"></i> DOWNLOAD KE FILE MANAGER</a>
-<button id="preview-delete" class="px-6 py-4 bg-rose-50 text-rose-600 rounded-xl font-bold"><i data-lucide="trash-2"></i></button>
+<!-- HEADER -->
+<header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-100 p-4">
+<div class="max-w-7xl mx-auto flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white"><i data-lucide="hard-drive" class="w-5 h-5"></i></div>
+<div>
+<h1 class="font-extrabold leading-none">Unlimited Drive</h1>
+<p class="text-xs text-slate-500"><span id="user-nama">User</span> • <span id="file-count">0 file</span></p>
 </div>
+</div>
+<div class="flex gap-2">
+<input type="file" id="fileInput" multiple hidden accept="*/*">
+<button onclick="document.getElementById('fileInput').click()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2"><i data-lucide="upload-cloud" class="w-4 h-4"></i> Upload Banyak</button>
+<button onclick="loadFiles()" class="bg-white border border-slate-200 p-2.5 rounded-xl"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
+</div>
+</div>
+<!-- Progress -->
+<div id="progress-wrap" class="max-w-7xl mx-auto mt-3 hidden">
+<div class="bg-slate-200 rounded-full h-2.5 overflow-hidden"><div id="progress-bar" class="bg-indigo-600 h-2.5 w-0 transition-all"></div></div>
+<p id="progress-text" class="text-xs font-bold text-indigo-600 mt-1"></p>
+</div>
+</header>
+
+<main class="max-w-7xl mx-auto p-4">
+<div id="file-grid" class="grid-files"></div>
+<div id="empty" class="hidden py-20 text-center"><i data-lucide="inbox" class="w-12 h-12 mx-auto text-slate-300 mb-3"></i><p class="text-sm text-slate-500">Belum ada file. Upload sekarang bisa pilih 100 foto/video sekaligus</p></div>
+<div id="loading" class="py-20 text-center text-sm text-slate-500">Memuat file...</div>
+</main>
+
+<!-- MODAL PREVIEW - TOMBOL DI ATAS BIAR KELIATAN -->
+<div id="preview-modal" class="fixed inset-0 bg-black/90 z-50 hidden">
+<div class="w-full h-full flex flex-col">
+<!-- BAR ATAS - TOMBOL SELALU KELIATAN -->
+<div class="bg-white px-4 py-3 flex items-center justify-between gap-3 shrink-0">
+<div class="min-w-0 flex-1">
+<p id="preview-name" class="font-bold text-sm truncate"></p>
+<p id="preview-size" class="text- text-slate-500"></p>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<a id="preview-download" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Download</a>
+<button id="preview-delete" class="bg-rose-50 hover:bg-rose-100 text-rose-600 p-2.5 rounded-xl"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+<button onclick="closePreview()" class="bg-slate-100 hover:bg-slate-200 p-2.5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
+</div>
+</div>
+<!-- ISI FOTO/VIDEO -->
+<div id="preview-content" class="flex-1 flex items-center justify-center p-2 overflow-auto"></div>
 </div>
 </div>
 
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbxL5BWM_1gIpiC2capsl-fR7ZN1wCoPNlTvbJ90j4ya8gPEYV_KO4rzOzAPndiLDg59PQ/exec";
-let allFiles=[]; lucide.createIcons();
-document.getElementById('user-nama').textContent=localStorage.getItem('presensi_nama')||'User';
-const fileInput=document.getElementById('fileInput'),grid=document.getElementById('file-grid'),loading=document.getElementById('loading'),empty=document.getElementById('empty');
-async function loadFiles(){loading.classList.remove('hidden');grid.innerHTML='';try{const r=await fetch(API_URL);const d=await r.json();allFiles=d.files||[];document.getElementById('file-count').textContent=allFiles.length+' file';renderFiles(allFiles);}catch(e){}finally{loading.classList.add('hidden');}}
-function renderFiles(files){grid.innerHTML='';if(!files.length){empty.classList.remove('hidden');return;}empty.classList.add('hidden');files.forEach(f=>{const isImg=f.mimeType.includes('image');const thumb=`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`;const card=document.createElement('div');card.className='bg-white rounded-2xl border overflow-hidden cursor-pointer';card.innerHTML=`<div class="h-44 bg-slate-100 overflow-hidden">${isImg?`<img src="${thumb}" class="w-full h-full object-cover">`:`<div class="w-full h-full flex items-center justify-center"><i data-lucide="file" class="w-10 h-10 text-slate-400"></i></div>`}</div><div class="p-3"><p class="font-bold text-xs truncate">${f.name}</p><p class="text- text-slate-400">${(f.size/1024/1024).toFixed(2)} MB</p></div>`;card.onclick=()=>openPreview(f);grid.appendChild(card);});lucide.createIcons();}
-fileInput.addEventListener('change',async(e)=>{const files=Array.from(e.target.files);if(!files.length)return;const wrap=document.getElementById('progress-wrap'),bar=document.getElementById('progress-bar'),txt=document.getElementById('progress-text');wrap.classList.remove('hidden');const payload={files:[],filenames:[],mimetypes:[]};for(let i=0;i<files.length;i++){txt.textContent=`Membaca ${i+1}/${files.length}`;bar.style.width=Math.round((i/files.length)*50)+'%';const b64=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(files[i]);});payload.files.push(b64.split(',')[1]);payload.filenames.push(files[i].name);payload.mimetypes.push(files[i].type);}txt.textContent='Upload...';bar.style.width='70%';const form=new FormData();payload.files.forEach((f,i)=>{form.append('files',f);form.append('filenames',payload.filenames[i]);form.append('mimetypes',payload.mimetypes[i]);});await fetch(API_URL,{method:'POST',body:form,mode:'no-cors'});bar.style.width='100%';txt.textContent='Berhasil!';setTimeout(()=>{wrap.classList.add('hidden');loadFiles();},1200);});
-function openPreview(f){document.getElementById('preview-modal').classList.remove('hidden');document.getElementById('preview-name').textContent=f.name;document.getElementById('preview-size').textContent=(f.size/1024/1024).toFixed(2)+' MB';document.getElementById('preview-download').href=`https://drive.google.com/uc?export=download&id=${f.id}`;document.getElementById('preview-delete').onclick=()=>{if(confirm('Hapus?')){const fd=new FormData();fd.append('action','delete');fd.append('id',f.id);fetch(API_URL,{method:'POST',body:fd,mode:'no-cors'}).then(()=>{closePreview();setTimeout(loadFiles,1000);});}};const c=document.getElementById('preview-content'),url=`https://lh3.googleusercontent.com/d/${f.id}`;if(f.mimeType.includes('image'))c.innerHTML=`<img src="${url}" class="max-w-full max-h-full object-contain">`;else if(f.mimeType.includes('video'))c.innerHTML=`<video src="${url}" controls autoplay class="max-w-full max-h-full"></video>`;else c.innerHTML=`<p class="text-white">${f.name}</p>`;}
+const API_URL = "https://script.google.com/macros/s/AKfycbxL5BWM_1gIpiC2capsl-fR7ZN1wCoPNlTvbJ90j4ya8gPEYV_KO4rzOzAPndiLDg59PQ/exec";
+let allFiles=[];
+const fileInput=document.getElementById('fileInput');
+const grid=document.getElementById('file-grid');
+const loading=document.getElementById('loading');
+const empty=document.getElementById('empty');
+
+document.getElementById('user-nama').textContent=localStorage.getItem('presensi_nama')||'Muhammad Gibran';
+lucide.createIcons();
+
+async function loadFiles(){
+  loading.classList.remove('hidden');
+  grid.innerHTML='';
+  try{
+    const res=await fetch(API_URL);
+    const data=await res.json();
+    allFiles=data.files||[];
+    document.getElementById('file-count').textContent=allFiles.length+' file';
+    if(allFiles.length===0){empty.classList.remove('hidden');}else{empty.classList.add('hidden');}
+    grid.innerHTML='';
+    allFiles.forEach(f=>{
+      const isImage=f.mimeType.includes('image');
+      const isVideo=f.mimeType.includes('video');
+      const thumb=`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`;
+      const div=document.createElement('div');
+      div.className='bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer hover:shadow-lg transition-all';
+      div.innerHTML=`<div class="h-40 bg-slate-100 flex items-center justify-center overflow-hidden">${isImage?`<img src="${thumb}" loading="lazy" class="w-full h-full object-cover">`:isVideo?`<div class="relative w-full h-full"><img src="${thumb}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-black/30 grid place-items-center"><i data-lucide="play-circle" class="w-10 h-10 text-white"></i></div></div>`:`<i data-lucide="file" class="w-8 h-8 text-slate-400"></i>`}</div><div class="p-2.5"><p class="font-bold text-xs truncate">${f.name}</p><p class="text- text-slate-400 mt-1">${(f.size/1024/1024).toFixed(2)} MB</p></div>`;
+      div.onclick=()=>openPreview(f);
+      grid.appendChild(div);
+    });
+    lucide.createIcons();
+  }catch(e){
+    grid.innerHTML=`<p class="col-span-full text-center text-rose-500 text-sm">Gagal load. Pastikan Web App sudah deploy Anyone.</p>`;
+  }finally{loading.classList.add('hidden');}
+}
+
+// UPLOAD BANYAK SEKALIGUS - PILIH BANYAK FILE
+fileInput.addEventListener('change',async(e)=>{
+  const files=[...e.target.files];
+  if(!files.length) return;
+  const wrap=document.getElementById('progress-wrap');
+  const bar=document.getElementById('progress-bar');
+  const txt=document.getElementById('progress-text');
+  wrap.classList.remove('hidden');
+  bar.style.width='0%';
+  const fd=new FormData();
+  for(let i=0;i<files.length;i++){
+    txt.textContent=`Membaca ${i+1}/${files.length}: ${files[i].name}`;
+    bar.style.width=Math.round((i/files.length)*50)+'%';
+    const b64=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(files[i]);});
+    fd.append('files',b64.split(',')[1]);
+    fd.append('filenames',files[i].name);
+    fd.append('mimetypes',files[i].type||'application/octet-stream');
+  }
+  txt.textContent=`Mengupload ${files.length} file ke Drive...`;
+  bar.style.width='80%';
+  try{
+    await fetch(API_URL,{method:'POST',body:fd,mode:'no-cors'});
+    bar.style.width='100%';
+    txt.textContent=`Berhasil! ${files.length} file terupload`;
+    fileInput.value='';
+    setTimeout(()=>{wrap.classList.add('hidden');loadFiles();},1500);
+  }catch(err){alert('Gagal: '+err);wrap.classList.add('hidden');}
+});
+
+function openPreview(f){
+  document.getElementById('preview-modal').classList.remove('hidden');
+  document.getElementById('preview-name').textContent=f.name;
+  document.getElementById('preview-size').textContent=(f.size/1024/1024).toFixed(2)+' MB • '+f.mimeType;
+  document.getElementById('preview-download').href=`https://drive.google.com/uc?export=download&id=${f.id}`;
+  document.getElementById('preview-delete').onclick=()=>{
+    if(confirm('Hapus file '+f.name+'?')){
+      const d=new FormData();d.append('action','delete');d.append('id',f.id);
+      fetch(API_URL,{method:'POST',body:d,mode:'no-cors'}).then(()=>{closePreview();setTimeout(loadFiles,1000);});
+    }
+  };
+  const c=document.getElementById('preview-content');
+  const viewUrl=`https://lh3.googleusercontent.com/d/${f.id}`;
+  if(f.mimeType.includes('image')){
+    c.innerHTML=`<img src="${viewUrl}" class="max-w-full max-h- object-contain rounded-xl">`;
+  }else if(f.mimeType.includes('video')){
+    c.innerHTML=`<video src="${viewUrl}" controls autoplay playsinline class="max-w-full max-h- rounded-xl bg-black"></video>`;
+  }else if(f.mimeType.includes('audio')){
+    c.innerHTML=`<div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center"><i data-lucide="music" class="w-12 h-12 mx-auto text-indigo-600 mb-3"></i><p class="font-bold text-sm mb-3">${f.name}</p><audio src="${viewUrl}" controls autoplay class="w-full"></audio></div>`;
+  }else{
+    c.innerHTML=`<div class="bg-white rounded-2xl p-8 text-center"><p class="font-bold">${f.name}</p><p class="text-xs text-slate-500 mt-2">Klik Download untuk simpan ke File Manager</p></div>`;
+  }
+  lucide.createIcons();
+}
 function closePreview(){document.getElementById('preview-modal').classList.add('hidden');}
+
 loadFiles();
 </script>
 </body>
