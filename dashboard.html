@@ -13,7 +13,7 @@
 <div class="flex items-center gap-3"><div class="w-10 h-10 bg-indigo-600 rounded-xl grid place-items-center text-white font-black text-">7TB</div><div><h1 class="font-black text-sm">UNLIMITED DRIVE V5 - APP 7TB via SCRIPT</h1><p class="text- text-slate-600"><span id="count">0</span> file • <span id="size">0GB / 7TB</span> • <span id="folders">0 folder</span> • Via Script</p><div class="w-56 bg-slate-200 h-2 rounded-full mt-1"><div id="storageBar" class="bg-indigo-600 h-2 rounded-full w-0 transition-all"></div></div></div></div>
 <div class="flex items-center gap-2"><input type="file" id="fileInput" multiple hidden accept="video/*,image/*,*/*"><button id="btnPick" class="bg-indigo-600 text-white px-5 py-3 rounded-xl font-bold text-sm">PILIH FILE VIA SCRIPT</button><button onclick="load()" class="bg-white border p-3 rounded-xl"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button><button onclick="logout()" class="bg-rose-50 text-rose-600 border px-4 py-3 rounded-xl font-bold text-xs">Keluar</button></div>
 </div>
-<!-- FIX LOADING ABU-ABU GAK KELIATAN -->
+<!-- INI YANG TADI ABU-ABU GAK KELIATAN - UDAH GUE BENERIN -->
 <div id="queue" class="max-w-7xl mx-auto mt-3 hidden">
 <div class="bg-slate-900 text-white rounded-2xl p-4 border-2 border-emerald-400 shadow-2xl">
 <div class="flex justify-between"><p id="qtitle" class="font-black text-sm">Upload via Script...</p><p id="qcounter" class="text- bg-white/20 px-2 py-1 rounded-full">0/0</p></div>
@@ -30,7 +30,7 @@
 
 <script>
 const API_URL="https://script.google.com/macros/s/AKfycbyirGQC4UpkYWk3QWq39by0QczkNR23uBd5mLFfPYCuuEJtKGfVfFTVwTrD3N-DpV_deA/exec";
-const CHUNK=8*1024*1024; // FIX VIDEO BANYAK: KECILIN 8MB BIAR GAK KENA LIMIT
+const CHUNK=8*1024*1024;
 let currentFiles=[]; let currentModalId=null;
 
 function load(){
@@ -38,7 +38,7 @@ function load(){
   let cb='cb_'+Date.now(); let s=document.createElement('script');
   window[cb]=d=>{
     document.getElementById('load').classList.add('hidden');
-    if(!d ||!d.files){ document.getElementById('grid').innerHTML='<p class="text-center py-10 text-sm text-rose-600">Gagal load. Cek: appsscript.json jangan double Drive + Deploy Anyone + Drive API ON</p>'; return; }
+    if(!d ||!d.files){ document.getElementById('grid').innerHTML='<p class="text-center py-10 text-sm text-rose-600">Gagal load. Cek appsscript.json double Drive + Deploy Anyone + Drive API ON</p>'; return; }
     document.getElementById('count').textContent=d.total; document.getElementById('size').textContent=d.totalSizeGB+'GB / 7TB'; document.getElementById('folders').textContent=d.folders+' folder'; document.getElementById('storageBar').style.width=Math.min((d.totalSize/d.maxBytes)*100,100)+'%';
     currentFiles=d.files;
     d.files.forEach(f=>{
@@ -67,7 +67,7 @@ async function hapus(id){ if(!confirm('Hapus file ini?')) return; let fd=new For
 function getResumableUrl(file){
   return new Promise((res,rej)=>{
     let cb='cb_up_'+Date.now()+Math.random().toString(36).substr(2,5);
-    window[cb]=d=>{ delete window[cb]; s.remove(); if(d && d.url) res(d.url); else rej('Gagal bikin jalur - cek Drive API ON'); };
+    window[cb]=d=>{ delete window[cb]; s.remove(); if(d && d.url) res(d.url); else rej('Gagal bikin jalur'); };
     let s=document.createElement('script');
     s.onerror=()=>{ delete window[cb]; s.remove(); rej('Drive API belum ON'); };
     s.src=API_URL+`?callback=${cb}&action=createResumable&filename=${encodeURIComponent(file.name)}&mimetype=${encodeURIComponent(file.type||'video/mp4')}&filesize=${file.size}&t=${Date.now()}`;
@@ -82,7 +82,6 @@ document.getElementById('fileInput').addEventListener('change', async e=>{
   let queue=document.getElementById('queue'); queue.classList.remove('hidden');
   document.getElementById('qcounter').textContent=`0/${files.length}`;
   document.getElementById('qList').innerHTML='';
-
   for(let idx=0; idx<files.length; idx++){
     let file=files[idx];
     document.getElementById('qtitle').textContent=`UPLOAD VIA SCRIPT ${idx+1}/${files.length}`;
@@ -90,7 +89,6 @@ document.getElementById('fileInput').addEventListener('change', async e=>{
     document.getElementById('qfile').textContent=`${file.name} (${(file.size/1024/1024).toFixed(1)}MB)`;
     document.getElementById('qbar').style.width='0%'; document.getElementById('qbar').textContent='0%';
     document.getElementById('qList').innerHTML+=`<div id="item-${idx}" class="py-1">⏳ ${idx+1}. ${file.name} - antri...</div>`;
-
     try{
       if(file.size < 35*1024*1024){
         document.getElementById('qstatus').textContent='Upload via script...';
@@ -109,22 +107,19 @@ document.getElementById('fileInput').addEventListener('change', async e=>{
           let pct=Math.round((end/file.size)*100);
           document.getElementById('qbar').style.width=pct+'%'; document.getElementById('qbar').textContent=pct+'%';
           document.getElementById('qdetail').textContent=`${pct}% - ${(end/1024/1024).toFixed(0)}MB / ${(file.size/1024/1024).toFixed(0)}MB`;
-          document.getElementById('qstatus').textContent=`Upload video ${idx+1}/${files.length} ${pct}% via script - jangan tutup tab`;
-          start=end;
-          await new Promise(r=>setTimeout(r,300));
+          document.getElementById('qstatus').textContent=`Upload ${idx+1}/${files.length} ${pct}% via script - jangan tutup tab`;
+          start=end; await new Promise(r=>setTimeout(r,300));
         }
-        document.getElementById(`item-${idx}`).innerHTML=`✅ ${idx+1}. ${file.name} - video masuk via script!`;
+        document.getElementById(`item-${idx}`).innerHTML=`✅ ${idx+1}. ${file.name} - video masuk!`;
       }
     }catch(err){
       document.getElementById(`item-${idx}`).innerHTML=`❌ ${idx+1}. ${file.name} - gagal: ${err}`;
-      await new Promise(r=>setTimeout(r,1500));
     }
   }
   document.getElementById('qtitle').textContent=`SELESAI! ${files.length} FILE MASUK!`;
   setTimeout(()=>{queue.classList.add('hidden'); load();},2000);
   e.target.value='';
 });
-
 function logout(){ if(confirm('Keluar? File tetap aman')){ localStorage.clear(); location.href='index.html'; } }
 load(); lucide.createIcons();
 </script>
