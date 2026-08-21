@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Unlimited Drive V5 - File Terpisah</title>
+<title>DASHBOARD FOTO 7TB - LINK BARU PISAH</title>
 <script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/lucide@latest"></script>
 <style>body{font-family:sans-serif;background:#f8fafc}.grid-files{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}</style>
 <script>if(localStorage.getItem('presensi_login')!=='true'){location.href='index.html'}</script>
@@ -10,60 +10,220 @@
 <body>
 <header class="sticky top-0 z-30 bg-white border-b p-3">
 <div class="max-w-7xl mx-auto flex justify-between items-center gap-2">
-<div class="flex items-center gap-3"><div class="w-10 h-10 bg-indigo-600 rounded-xl grid place-items-center text-white font-black text-">7TB</div><div><h1 class="font-black text-sm">UNLIMITED DRIVE V5</h1><p class="text- text-slate-600"><span id="count">0</span> file • <span id="size">0GB / 7TB</span> • Via Script</p><div class="w-56 bg-slate-200 h-2 rounded-full mt-1"><div id="storageBar" class="bg-indigo-600 h-2 rounded-full w-0"></div></div></div></div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-indigo-600 rounded-xl grid place-items-center text-white font-black text-">7TB</div>
+<div>
+<h1 class="font-black text-sm">DASHBOARD FOTO 7TB - PISAH</h1>
+<p class="text- text-slate-600"><span id="count">0</span> file • <span id="size">0GB / 7TB FOTO</span> • <span id="folders">0 folder</span> • Link Baru Pisah</p>
+<div class="w-56 bg-slate-200 h-2 rounded-full mt-1"><div id="storageBar" class="bg-indigo-600 h-2 rounded-full w-0"></div></div>
+</div>
+</div>
 <div class="flex items-center gap-2">
-<input type="file" id="fileInput" multiple hidden accept="video/*,image/*,*/*">
-<button id="btnPick" class="bg-indigo-600 text-white px-4 py-3 rounded-xl font-bold text-xs">PILIH FILE</button>
+<input type="file" id="fileInput" multiple hidden accept="image/*,.jpg,.jpeg,.png,.gif,.webp,.heic">
+<button id="btnPick" class="bg-indigo-600 text-white px-4 py-3 rounded-xl font-bold text-xs">📸 PILIH FOTO BANYAK - LINK BARU</button>
 <button onclick="load()" class="bg-white border p-3 rounded-xl"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
-<!-- ICON VIDEO - DARI DASHBOARD KE VIDEO.HTML -->
-<a href="video.html" class="bg-red-600 text-white p-3 rounded-xl border-2 border-red-300 shadow-lg flex items-center gap-1" title="Pindah ke Video Terpisah"><i data-lucide="video" class="w-5 h-5"></i><span class="text- font-black">VIDEO</span></a>
+<a href="video.html" class="bg-red-600 text-white p-3 rounded-xl border-2 border-red-300 shadow-lg flex items-center gap-1"><i data-lucide="video" class="w-5 h-5"></i><span class="text- font-black">VIDEO 7TB</span></a>
 <button onclick="logout()" class="bg-rose-50 text-rose-600 border px-3 py-3 rounded-xl font-bold text-">Keluar</button>
 </div>
 </div>
-<div id="queue" class="max-w-7xl mx-auto mt-3 hidden"><div class="bg-slate-900 text-white rounded-2xl p-4 border-2 border-emerald-400"><div class="flex justify-between"><p id="qtitle" class="font-black text-sm">Upload...</p><p id="qcounter" class="text- bg-white/20 px-2 py-1 rounded-full">0/0</p></div><div class="w-full bg-white/20 h-4 rounded-full mt-3 overflow-hidden"><div id="qbar" class="bg-emerald-400 h-4 rounded-full w-0 text- font-bold grid place-items-center text-black"></div></div><p id="qfile" class="text- mt-2 truncate font-bold text-emerald-300"></p><p id="qdetail" class="text- mt-1 text-white/70"></p><p id="qstatus" class="text- mt-1 text-yellow-300"></p><div id="qList" class="mt-2 max-h-32 overflow-y-auto text- bg-black/30 rounded-xl p-2"></div></div></div>
+
+<div id="infoPisah" class="max-w-7xl mx-auto mt-3 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-3 flex justify-between items-center">
+<div><p class="font-black text-xs text-white">🔥 DASHBOARD FOTO PISAH - LINK BARU LU!</p><p class="text- mt-1 text-white/80">AKfycbyirGQC4Upk.../exec - type=foto - Foto gak akan kehapus pas buka video lagi! 7TB khusus foto!</p></div>
+<a href="video.html" class="bg-white text-black px-3 py-1 rounded-full text- font-bold">VIDEO 7TB →</a>
+</div>
+
+<div id="queue" class="max-w-7xl mx-auto mt-3 hidden">
+<div class="bg-slate-900 text-white rounded-2xl p-4 border-2 border-emerald-400">
+<div class="flex justify-between"><p id="qtitle" class="font-black text-sm">Upload Foto ke Link Baru...</p><p id="qcounter" class="text- bg-white/20 px-2 py-1 rounded-full">0/0</p></div>
+<div class="w-full bg-white/20 h-4 rounded-full mt-3 overflow-hidden"><div id="qbar" class="bg-emerald-400 h-4 rounded-full w-0 text- font-bold grid place-items-center text-black transition-all">0%</div></div>
+<p id="qfile" class="text- mt-2 truncate font-bold text-emerald-300"></p>
+<p id="qdetail" class="text- mt-1 text-white/70"></p>
+<p id="qstatus" class="text- mt-1 text-yellow-300">Link baru pisah - foto masuk folder FOTO 7TB - video gak ikut kehapus!</p>
+<div id="qList" class="mt-2 max-h-32 overflow-y-auto text- bg-black/30 rounded-xl p-2"></div>
+</div>
+</div>
 </header>
+
 <main class="max-w-7xl mx-auto p-3">
-<div class="bg-blue-50 border border-blue-200 rounded-2xl p-3 mb-3 flex justify-between items-center"><p class="text- font-bold text-blue-700">📸 DASHBOARD FOTO - Klik icon VIDEO merah di atas untuk ke Video Terpisah</p><a href="video.html" class="bg-red-600 text-white px-3 py-1 rounded-full text- font-bold">VIDEO.TERPISAH →</a></div>
-<p id="filterInfo" class="text- font-bold text-slate-600 mb-3">Semua file via Script</p>
-<div id="grid" class="grid-files"></div><div id="load" class="py-20 text-center"><p class="text-sm font-bold">Loading...</p></div>
+<div class="bg-blue-50 border border-blue-200 rounded-2xl p-3 mb-3 flex justify-between items-center">
+<p class="text- font-bold text-blue-700">📸 FOTO 7TB PISAH - Link Baru: AKfycbyirGQC4Upk... - Video ada di VIDEO 7TB terpisah, gak campur lagi!</p>
+<a href="video.html" class="bg-red-600 text-white px-3 py-1 rounded-full text- font-bold">VIDEO 7TB 14.500 →</a>
+</div>
+<p id="filterInfo" class="text- font-bold text-slate-600 mb-3">Foto via Script Link Baru Pisah - type=foto</p>
+<div id="grid" class="grid-files"></div>
+<div id="load" class="py-20 text-center"><p class="text-sm font-bold">Loading FOTO 7TB Pisah - Link Baru...</p><p class="text- text-slate-400 mt-1">AKfycbyirGQC4UpkYWk3QWq39by0QczkNR23uBd5mLFfPYCuuEJtKGfVfFTVwTrD3N-DpV_deA/exec - type=foto</p></div>
 </main>
-<div id="modal" class="fixed inset-0 z-50 hidden bg-black/80 grid place-items-center p-4"><div class="bg-white rounded-2xl max-w-3xl w-full overflow-hidden"><div class="p-3 flex justify-between border-b"><p id="modalName" class="font-bold text-sm truncate"></p><button onclick="closeModal()" class="bg-slate-100 p-2 rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button></div><div class="p-3"><img id="modalImg" class="w-full max-h- object-contain bg-slate-100 rounded-xl hidden"><video id="modalVideo" controls class="w-full max-h- bg-black rounded-xl hidden"></video><div class="flex gap-2 mt-3"><button onclick="downloadViaScript(currentModalId)" class="bg-indigo-600 text-white px-4 py-2 rounded-full text-xs font-bold">Download</button><button id="modalDelete" class="bg-rose-50 text-rose-600 border px-4 py-2 rounded-full text-xs font-bold">Hapus</button></div></div></div></div>
+
+<div id="modal" class="fixed inset-0 z-50 hidden bg-black/80 grid place-items-center p-4">
+<div class="bg-white rounded-2xl max-w-3xl w-full overflow-hidden">
+<div class="p-3 flex justify-between border-b"><p id="modalName" class="font-bold text-sm truncate"></p><button onclick="closeModal()" class="bg-slate-100 p-2 rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+<div class="p-3">
+<img id="modalImg" class="w-full max-h- object-contain bg-slate-100 rounded-xl hidden">
+<video id="modalVideo" controls class="w-full max-h- bg-black rounded-xl hidden"></video>
+<div class="flex gap-2 mt-3">
+<button onclick="downloadViaScript(currentModalId)" class="bg-indigo-600 text-white px-4 py-2 rounded-full text-xs font-bold">Download via Link Baru</button>
+<button id="modalDelete" class="bg-rose-50 text-rose-600 border px-4 py-2 rounded-full text-xs font-bold">Hapus</button>
+</div>
+</div>
+</div>
+</div>
+
 <script>
 const API_URL="https://script.google.com/macros/s/AKfycbyirGQC4UpkYWk3QWq39by0QczkNR23uBd5mLFfPYCuuEJtKGfVfFTVwTrD3N-DpV_deA/exec";
-const CHUNK=8*1024*1024; let currentFiles=[]; let allFiles=[]; let currentModalId=null;
+const CHUNK=8*1024*1024;
+let currentFiles=[]; let allFiles=[]; let currentModalId=null;
+
 function load(){
-  document.getElementById('load').classList.remove('hidden'); document.getElementById('grid').innerHTML='';
-  let cb='cb_'+Date.now(); let s=document.createElement('script');
+  document.getElementById('load').classList.remove('hidden');
+  document.getElementById('grid').innerHTML='';
+  let cb='cb_foto_'+Date.now();
+  let s=document.createElement('script');
   window[cb]=d=>{
     document.getElementById('load').classList.add('hidden');
-    if(!d ||!d.files) return;
-    document.getElementById('count').textContent=d.total; document.getElementById('size').textContent=d.totalSizeGB+'GB / 7TB'; document.getElementById('storageBar').style.width=Math.min((d.totalSize/d.maxBytes)*100,100)+'%';
-    allFiles=d.files; currentFiles=d.files; renderFiles(d.files);
+    if(!d ||!d.files){
+      document.getElementById('grid').innerHTML='<p class="col-span-full text-center py-10 text-sm">Gagal load. Cek: 1. Deploy New Version Anyone 2. Drive API ON 3. Link baru benar - type=foto</p>';
+      return;
+    }
+    document.getElementById('count').textContent=d.total;
+    document.getElementById('size').textContent=d.totalSizeGB+'GB / 7TB FOTO';
+    document.getElementById('folders').textContent=d.folders+' folder';
+    document.getElementById('storageBar').style.width=Math.min((d.totalSize/d.maxBytes)*100,100)+'%';
+    document.getElementById('filterInfo').textContent=`Foto: ${d.total} file via Link Baru Pisah - ${d.folders} folder FOTO 7TB`;
+    allFiles=d.files; currentFiles=d.files;
+    renderFiles(d.files);
     delete window[cb]; s.remove(); lucide.createIcons();
   };
-  s.src=API_URL+"?callback="+cb+"&t="+Date.now(); document.body.appendChild(s);
+  // PENTING: type=foto biar gak campur video, gak kehapus lagi!
+  s.src=API_URL+"?callback="+cb+"&type=foto&t="+Date.now();
+  document.body.appendChild(s);
 }
+
 function renderFiles(files){
-  document.getElementById('grid').innerHTML=''; document.getElementById('filterInfo').textContent=`Semua: ${files.length} file via Script`;
+  document.getElementById('grid').innerHTML='';
+  if(!files.length){
+    document.getElementById('grid').innerHTML='<p class="col-span-full text-center py-10 text-sm text-slate-400">Belum ada foto di Link Baru - upload foto banyak via link baru di atas! Foto masuk folder FOTO 7TB pisah, video gak ikut!</p>';
+    return;
+  }
   files.forEach(f=>{
-    let el=document.createElement('div'); el.className='bg-white rounded-2xl border overflow-hidden';
+    let el=document.createElement('div'); el.className='bg-white rounded-2xl border overflow-hidden hover:border-indigo-500/50';
     let thumb=`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`; let view=`https://drive.google.com/uc?export=view&id=${f.id}`;
-    let isVideo=f.mime && f.mime.includes('video');
-    el.innerHTML=`<div onclick="openModal('${f.id}')" class="h-36 bg-slate-100 grid place-items-center overflow-hidden relative"><img src="${thumb}" loading="lazy" onerror="this.src='${view}'" class="w-full h-full object-cover">${isVideo?'<div class="absolute bg-black/70 text-white text- px-2 py-1 rounded-full font-bold">VIDEO</div>':'<div class="absolute bg-blue-600/80 text-white text- px-2 py-1 rounded-full font-bold">FOTO</div>'}</div><div class="p-2.5"><p class="text- font-bold truncate">${f.name}</p><p class="text- text-slate-400">${(f.size/1024/1024).toFixed(2)}MB</p><div class="flex gap-1 mt-2"><button onclick="downloadViaScript('${f.id}')" class="bg-indigo-600 text-white text- px-2.5 py-1 rounded-full font-bold">Download</button><button onclick="hapus('${f.id}')" class="bg-rose-50 text-rose-600 text- px-2.5 py-1 rounded-full font-bold">Hapus</button></div></div>`;
+    el.innerHTML=`<div onclick="openModal('${f.id}')" class="h-36 bg-slate-100 grid place-items-center overflow-hidden relative cursor-pointer"><img src="${thumb}" loading="lazy" onerror="this.src='${view}'" class="w-full h-full object-cover"><div class="absolute top-1 left-1 bg-indigo-600 text-white text- px-2 py-1 rounded-full font-bold">FOTO 7TB</div></div><div class="p-2.5"><p class="text- font-bold truncate">${f.name}</p><p class="text- text-slate-400">${(f.size/1024/1024).toFixed(2)}MB • ${f.folder||'FOTO 7TB'}</p><div class="flex gap-1 mt-2"><button onclick="openModal('${f.id}')" class="bg-indigo-600 text-white text- px-2.5 py-1 rounded-full font-bold">Lihat</button><button onclick="downloadViaScript('${f.id}')" class="bg-white border text- px-2.5 py-1 rounded-full font-bold">Download</button><button onclick="hapus('${f.id}')" class="bg-rose-50 text-rose-600 text- px-2.5 py-1 rounded-full font-bold">Hapus</button></div></div>`;
     document.getElementById('grid').appendChild(el);
   });
   lucide.createIcons();
 }
-function downloadViaScript(id){ let f=allFiles.find(x=>x.id==id); if(!f) return; let cb='dl_'+Date.now(); let overlay=document.createElement('div'); overlay.className='fixed inset-0 bg-black/60 z-[60] grid place-items-center p-4'; overlay.innerHTML=`<div class="bg-white rounded-2xl p-5 text-center"><p class="font-bold text-sm">Download ${f.name}...</p></div>`; document.body.appendChild(overlay); window[cb]=d=>{ if(d.status=="success"){ let a=document.createElement('a'); a.href=`data:${d.mime};base64,${d.data}`; a.download=d.name; document.body.appendChild(a); a.click(); a.remove(); } delete window[cb]; s.remove(); overlay.remove(); }; let s=document.createElement('script'); s.src=API_URL+`?callback=${cb}&action=download&id=${id}&t=${Date.now()}`; document.body.appendChild(s); }
-function openModal(id){ currentModalId=id; let f=allFiles.find(x=>x.id==id); if(!f) return; document.getElementById('modal').classList.remove('hidden'); document.getElementById('modalName').textContent=f.name; document.getElementById('modalDelete').onclick=()=>{closeModal(); hapus(id);}; let isVideo=f.mime && f.mime.includes('video'); if(isVideo){ document.getElementById('modalImg').classList.add('hidden'); let v=document.getElementById('modalVideo'); v.classList.remove('hidden'); v.src=`https://drive.google.com/uc?export=view&id=${f.id}`; } else { document.getElementById('modalVideo').classList.add('hidden'); document.getElementById('modalImg').classList.remove('hidden'); document.getElementById('modalImg').src=`https://drive.google.com/uc?export=view&id=${f.id}`; } }
-function closeModal(){ document.getElementById('modal').classList.add('hidden'); document.getElementById('modalVideo').pause(); }
-async function hapus(id){ if(!confirm('Hapus?')) return; let fd=new FormData(); fd.append('action','delete'); fd.append('id',id); await fetch(API_URL,{method:'POST',body:fd,mode:'no-cors'}); setTimeout(load,1200); }
-function getResumableUrl(file){ return new Promise((res,rej)=>{ let cb='cb_up_'+Date.now()+Math.random().toString(36).substr(2,5); window[cb]=d=>{ delete window[cb]; s.remove(); if(d && d.url) res(d.url); else rej('Gagal'); }; let s=document.createElement('script'); s.src=API_URL+`?callback=${cb}&action=createResumable&filename=${encodeURIComponent(file.name)}&mimetype=${encodeURIComponent(file.type||'video/mp4')}&filesize=${file.size}&t=${Date.now()}`; document.body.appendChild(s); }); }
+
+function downloadViaScript(id){
+  let f=allFiles.find(x=>x.id==id); if(!f) return;
+  let cb='dl_'+Date.now();
+  let overlay=document.createElement('div'); overlay.className='fixed inset-0 bg-black/60 z-[60] grid place-items-center p-4';
+  overlay.innerHTML=`<div class="bg-white rounded-2xl p-5 text-center"><p class="font-bold text-sm">Download ${f.name} via Link Baru...</p></div>`;
+  document.body.appendChild(overlay);
+  window[cb]=d=>{
+    if(d.status=="success"){
+      let a=document.createElement('a'); a.href=`data:${d.mime};base64,${d.data}`; a.download=d.name;
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+    delete window[cb]; s.remove(); overlay.remove();
+  };
+  let s=document.createElement('script');
+  s.src=API_URL+`?callback=${cb}&action=download&id=${id}&t=${Date.now()}`;
+  document.body.appendChild(s);
+}
+
+function openModal(id){
+  currentModalId=id;
+  let f=allFiles.find(x=>x.id==id); if(!f) return;
+  document.getElementById('modal').classList.remove('hidden');
+  document.getElementById('modalName').textContent=f.name;
+  document.getElementById('modalDelete').onclick=()=>{closeModal(); hapus(id);};
+  let isVideo=f.mime && f.mime.includes('video');
+  if(isVideo){
+    document.getElementById('modalImg').classList.add('hidden');
+    let v=document.getElementById('modalVideo'); v.classList.remove('hidden');
+    v.src=`https://drive.google.com/uc?export=view&id=${f.id}`;
+  }else{
+    document.getElementById('modalVideo').classList.add('hidden');
+    document.getElementById('modalImg').classList.remove('hidden');
+    document.getElementById('modalImg').src=`https://drive.google.com/uc?export=view&id=${f.id}`;
+  }
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.add('hidden');
+  document.getElementById('modalVideo').pause();
+}
+
+async function hapus(id){
+  if(!confirm('Hapus foto ini dari FOTO 7TB? Video di VIDEO 7TB gak akan kehapus!')) return;
+  let fd=new FormData(); fd.append('action','delete'); fd.append('id',id);
+  await fetch(API_URL,{method:'POST',body:fd,mode:'no-cors'});
+  setTimeout(load,1200);
+}
+
+function getResumableUrl(file){
+  return new Promise((res,rej)=>{
+    let cb='cb_up_'+Date.now()+Math.random().toString(36).substr(2,5);
+    window[cb]=d=>{ delete window[cb]; s.remove(); if(d && d.url) res(d.url); else rej('Gagal - Drive API belum ON'); };
+    let s=document.createElement('script');
+    s.src=API_URL+`?callback=${cb}&action=createResumable&filename=${encodeURIComponent(file.name)}&mimetype=${encodeURIComponent(file.type||'image/jpeg')}&filesize=${file.size}&t=${Date.now()}`;
+    document.body.appendChild(s);
+  });
+}
+
 document.getElementById('btnPick').onclick=()=>document.getElementById('fileInput').click();
+
 document.getElementById('fileInput').addEventListener('change', async e=>{
-  let files=[...e.target.files]; if(!files.length) return; let queue=document.getElementById('queue'); queue.classList.remove('hidden'); document.getElementById('qcounter').textContent=`0/${files.length}`; document.getElementById('qList').innerHTML='';
-  for(let idx=0; idx<files.length; idx++){ let file=files[idx]; document.getElementById('qtitle').textContent=`UPLOAD ${idx+1}/${files.length} - ${file.name}`; document.getElementById('qcounter').textContent=`${idx+1}/${files.length}`; document.getElementById('qfile').textContent=file.name; document.getElementById('qbar').style.width='0%'; document.getElementById('qList').innerHTML+=`<div id="item-${idx}">⏳ ${file.name}</div>`; try{ if(file.size<35*1024*1024){ let b64=await new Promise(r=>{let fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.readAsDataURL(file);}); let fd=new FormData(); fd.append('file',b64); fd.append('filename',file.name); fd.append('mimetype',file.type); await fetch(API_URL,{method:'POST',body:fd,mode:'no-cors'}); document.getElementById('qbar').style.width='100%'; document.getElementById(`item-${idx}`).innerHTML=`✅ ${file.name}`; }else{ let url=await getResumableUrl(file); let start=0; while(start<file.size){ let end=Math.min(start+CHUNK,file.size); let chunk=file.slice(start,end); await fetch(url,{method:'PUT',headers:{"Content-Range":`bytes ${start}-${end-1}/${file.size}`},body:chunk}); let pct=Math.round((end/file.size)*100); document.getElementById('qbar').style.width=pct+'%'; start=end; await new Promise(r=>setTimeout(r,300)); } document.getElementById(`item-${idx}`).innerHTML=`✅ ${file.name}`; } }catch(err){ document.getElementById(`item-${idx}`).innerHTML=`❌ ${file.name}`; } } setTimeout(()=>{queue.classList.add('hidden'); load();},1500); e.target.value=''; });
-function logout(){ if(confirm('Keluar?')){ localStorage.clear(); location.href='index.html'; } }
+  let files=[...e.target.files]; if(!files.length) return;
+  if(!confirm(`Mau upload ${files.length} FOTO ke LINK BARU PISAH?\n${API_URL}\nMasuk folder FOTO 7TB, video gak kehapus! Lanjut?`)){ e.target.value=''; return; }
+  let queue=document.getElementById('queue'); queue.classList.remove('hidden');
+  document.getElementById('qcounter').textContent=`0/${files.length}`; document.getElementById('qList').innerHTML='';
+  document.getElementById('qtitle').textContent=`UPLOAD ${files.length} FOTO KE LINK BARU PISAH`;
+  for(let idx=0; idx<files.length; idx++){
+    let file=files[idx];
+    document.getElementById('qcounter').textContent=`${idx+1}/${files.length}`;
+    document.getElementById('qfile').textContent=`${idx+1}/${files.length}: ${file.name} (${(file.size/1024/1024).toFixed(2)}MB)`;
+    document.getElementById('qbar').style.width='0%'; document.getElementById('qbar').textContent='0%';
+    let item=document.createElement('div'); item.id=`item-${idx}`; item.className='py-1 border-b border-black/5';
+    item.innerHTML=`⏳ ${idx+1}. ${file.name} - antri FOTO 7TB...`;
+    document.getElementById('qList').appendChild(item);
+    let success=false; let retry=0;
+    while(!success && retry<3){
+      try{
+        if(file.size<35*1024*1024){
+          document.getElementById('qdetail').textContent=`Upload foto kecil (coba ${retry+1})...`;
+          let b64=await new Promise(r=>{let fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.readAsDataURL(file);});
+          let fd=new FormData(); fd.append('file',b64); fd.append('filename',file.name); fd.append('mimetype',file.type||'image/jpeg');
+          await fetch(API_URL,{method:'POST',body:fd,mode:'no-cors'});
+          document.getElementById(`item-${idx}`).innerHTML=`✅ ${idx+1}. ${file.name} - MASUK FOTO 7TB!`;
+          success=true;
+        }else{
+          document.getElementById('qdetail').textContent=`Foto gede (coba ${retry+1})...`;
+          let url=await getResumableUrl(file); let start=0;
+          while(start<file.size){
+            let end=Math.min(start+CHUNK,file.size); let chunk=file.slice(start,end);
+            await fetch(url,{method:'PUT',headers:{"Content-Range":`bytes ${start}-${end-1}/${file.size}`},body:chunk});
+            let pct=Math.round((end/file.size)*100); document.getElementById('qbar').style.width=pct+'%'; document.getElementById('qbar').textContent=pct+'%';
+            start=end; await new Promise(r=>setTimeout(r,300));
+          }
+          document.getElementById(`item-${idx}`).innerHTML=`✅ ${idx+1}. ${file.name} - MASUK FOTO 7TB!`;
+          success=true;
+        }
+      }catch(err){
+        retry++; document.getElementById(`item-${idx}`).innerHTML=`⏳ ${idx+1}. ${file.name} - retry ${retry}/3...`;
+        await new Promise(r=>setTimeout(r,1500));
+        if(retry>=3) document.getElementById(`item-${idx}`).innerHTML=`❌ ${idx+1}. ${file.name} - gagal 3x: ${err}`;
+      }
+    }
+    document.getElementById('qbar').style.width='100%'; document.getElementById('qbar').textContent='100%';
+    await new Promise(r=>setTimeout(r,300));
+  }
+  document.getElementById('qtitle').textContent=`SELESAI! ${files.length} FOTO MASUK LINK BARU PISAH!`;
+  setTimeout(()=>{queue.classList.add('hidden'); load();},1500);
+  e.target.value='';
+});
+
+function logout(){ if(confirm('Keluar? Foto aman di FOTO 7TB')){ localStorage.clear(); location.href='index.html'; } }
 load(); lucide.createIcons();
 </script>
 </body>
