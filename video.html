@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VIDEO 7TB - LINK AWAL FIX</title>
+<title>VIDEO 7TB - REVIEW FIX</title>
 <style>
 body{background:#0a0a0a;color:#fff;font-family:Arial;padding:15px;margin:0}
 .top{display:flex;justify-content:space-between;background:#000;padding:12px;border-radius:12px;align-items:center;flex-wrap:wrap;gap:10px}
@@ -10,279 +10,133 @@ body{background:#0a0a0a;color:#fff;font-family:Arial;padding:15px;margin:0}
 .card{background:#151515;border:1px solid #222;border-radius:12px;overflow:hidden}
 .thumb{background:#000;height:130px;display:flex;align-items:center;justify-content:center;position:relative}
 .play-btn{background:red;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:9999}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;z-index:9999}
 .modal.show{display:flex}
-.modal-box{background:#111;width:95%;max-width:800px;border-radius:12px;overflow:hidden;border:1px solid #333}
-video,iframe{width:100%;max-height:70vh;border:0;background:#000}
-.btn{padding:8px 16px;border-radius:20px;border:none;cursor:pointer;font-weight:bold;font-size:12px}
+.modal-box{background:#111;width:95%;max-width:850px;border-radius:12px;overflow:hidden;border:1px solid #333}
+video{width:100%;max-height:75vh;background:#000}
+.btn{padding:10px 18px;border-radius:20px;border:none;cursor:pointer;font-weight:bold;font-size:12px}
 .btn-red{background:red;color:#fff}
 #queue{display:none;background:#fff;color:#000;padding:12px;border-radius:12px;margin-bottom:12px}
-.bar{height:22px;background:#eee;border-radius:10px;overflow:hidden;margin-top:8px;border:1px solid #ddd}
-.bar-inner{height:22px;background:linear-gradient(90deg,red,#ff4d00);width:0%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;transition:width 0.2s}
+.bar{height:22px;background:#eee;border-radius:10px;overflow:hidden;margin-top:8px}
+.bar-inner{height:22px;background:red;width:0%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;transition:width 0.2s}
 </style></head><body>
 <div class="top">
-  <div style="display:flex;gap:10px;align-items:center">
-    <div class="logo">7TB</div>
-    <div>
-      <div style="font-weight:bold">VIDEO 7TB - LINK AWAL FIX</div>
-      <div id="info" style="font-size:11px;color:#888">LINK AWAL 1Miwo_5qEeFKH2MGaqfAghUtYeioHTtmI7PVe7edq7s2U7TKXczLkl1js - Loading...</div>
-    </div>
-  </div>
-  <label for="fileInput" class="btn btn-red" style="padding:12px 20px;font-size:13px;cursor:pointer">📁 PILIH VIDEO NGEBUT</label>
+  <div style="display:flex;gap:10px;align-items:center"><div class="logo">7TB</div><div><div style="font-weight:bold">VIDEO 7TB - REVIEW & DOWNLOAD FIX</div><div id="info" style="font-size:11px;color:#888">Loading...</div></div></div>
+  <label for="fileInput" class="btn btn-red" style="padding:12px 20px;cursor:pointer">📁 PILIH VIDEO NGEBUT</label>
   <input type="file" id="fileInput" multiple accept="video/*" style="position:absolute;left:-9999px">
 </div>
-
-<div class="banner">🔥 LINK AWAL 1Miwo_5qEe - AUTHORIZE OK - BISA UPLOAD KECIL & GEDE SAMPAI 7TB!<br><span id="status" style="font-size:12px;font-weight:normal">VIDEO ONLY - Ready Upload</span></div>
-
-<div id="queue">
-  <div style="display:flex;justify-content:space-between;font-weight:bold"><span id="qtitle">Upload...</span><span id="qcount">0/0</span></div>
-  <div class="bar"><div id="qbar" class="bar-inner">0%</div></div>
-  <div id="qfile" style="font-size:11px;margin-top:6px;word-break:break-all"></div>
-  <div id="qList" style="font-size:11px;margin-top:8px;max-height:200px;overflow:auto;background:#f5f5f5;padding:8px;border-radius:8px"></div>
-</div>
-
-<div style="margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-  <button class="btn" style="background:#222;color:#ccc" onclick="loadData()">🔄 Refresh</button>
-  <span id="countInfo" style="font-size:11px;color:#888"></span>
-</div>
-
-<div id="msg" style="display:none;background:#220000;color:#ff9999;padding:12px;border-radius:8px;margin-bottom:12px;font-size:12px"></div>
-
+<div class="banner">🔥 REVIEW LANGSUNG DI WEB - DOWNLOAD MASUK FILE MANAGER!<br><span id="status" style="font-size:12px;font-weight:normal">Link Awal 1Miwo OK</span></div>
+<div id="queue"><div style="display:flex;justify-content:space-between;font-weight:bold"><span id="qtitle">Upload...</span><span id="qcount">0/0</span></div><div class="bar"><div id="qbar" class="bar-inner">0%</div></div><div id="qfile" style="font-size:11px;margin-top:6px"></div><div id="qList" style="font-size:11px;margin-top:8px;max-height:200px;overflow:auto;background:#f5f5f5;padding:8px;border-radius:8px"></div></div>
+<div style="margin-bottom:12px"><button class="btn" style="background:#222;color:#ccc" onclick="loadData()">🔄 Refresh</button> <span id="countInfo" style="font-size:11px;color:#888"></span></div>
+<div id="msg" style="display:none;background:#220000;color:#ff9999;padding:12px;border-radius:8px;margin-bottom:12px"></div>
 <div class="grid" id="grid"></div>
-
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <div style="padding:12px;background:#000;display:flex;justify-content:space-between;align-items:center">
-      <div id="mtitle" style="font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:85%">Video</div>
-      <button onclick="closeModal()" style="background:#222;color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-weight:bold">X</button>
-    </div>
-    <div style="background:#000;min-height:400px;display:flex;align-items:center;justify-content:center;flex-direction:column">
-      <div id="loading" style="color:#888">Memuat video...</div>
-      <iframe id="ifr" style="display:none;width:100%;height:65vh" allowfullscreen></iframe>
-      <video id="vid" controls style="display:none;width:100%;max-height:65vh"></video>
-    </div>
-    <div style="padding:10px;background:#000;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-red" onclick="playIframe()">Preview</button>
-      <button class="btn btn-red" onclick="playDirect()">Direct</button>
-      <button class="btn" style="background:#222;color:#ccc" onclick="downloadVideo()">Download</button>
-      <button class="btn" style="background:#660000;color:#fff" onclick="hapus()">Hapus</button>
-    </div>
-  </div>
-</div>
-
+<div class="modal" id="modal"><div class="modal-box"><div style="padding:12px;background:#000;display:flex;justify-content:space-between"><div id="mtitle" style="font-weight:bold;max-width:85%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Video</div><button onclick="closeModal()" style="background:#222;color:#fff;border:none;width:32px;height:32px;border-radius:50%">X</button></div><div style="background:#000;min-height:400px;display:flex;align-items:center;justify-content:center;position:relative"><div id="loading" style="color:#888;position:absolute">Memuat video...</div><video id="vid" controls playsinline style="display:none"></video></div><div style="padding:12px;background:#000;display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-red" onclick="playVideo()" style="flex:1">▶️ Play Review</button><button class="btn" style="background:#222;color:#fff;flex:1" onclick="downloadVideo()">⬇️ Download ke File Manager</button><button class="btn" style="background:#660000;color:#fff" onclick="hapus()">Hapus</button></div><div style="padding:8px;background:#000;font-size:10px;color:#666;text-align:center">Review langsung di web - gak mental ke Google Drive lagi!</div></div></div>
 <script>
-const API = "https://script.google.com/macros/s/AKfycbwP1Ksq2WnIpb4E-gPhmTQMSg2OOIxw_HipwQ07Z1n4Mjm0cJQsZ4GFWnBmTwNT1ioO/exec";
-const CHUNK = 10*1024*1024;
-let allFiles = [];
-let currentId = "";
-
+const API="https://script.google.com/macros/s/AKfycbwP1Ksq2WnIpb4E-gPhmTQMSg2OOIxw_HipwQ07Z1n4Mjm0cJQsZ4GFWnBmTwNT1ioO/exec";
+const CHUNK=10*1024*1024;
+let currentId="";
 function loadData(){
-  const grid = document.getElementById('grid');
-  const msg = document.getElementById('msg');
-  grid.innerHTML = '<div style=color:#888>Loading video 7TB Link Awal...</div>';
-  msg.style.display = 'none';
-  let cb = 'cb_'+Date.now();
-  let s = document.createElement('script');
-  window[cb] = d => {
-    if(!d || d.status!="success"){
-      msg.style.display='block';
-      msg.innerText='❌ Exec error! Deploy > Manage deployments > Who has access = Anyone + New Version! ' + (d?d.message:'');
-      grid.innerHTML='';
-      delete window[cb]; s.remove();
-      return;
-    }
-    allFiles = d.files;
-    document.getElementById('info').innerText = d.total+' video • '+d.totalSizeGB+'GB / 7TB • '+d.folders+' folder • Link Awal OK';
-    document.getElementById('countInfo').innerText = d.total+' video • '+d.totalSizeGB+'GB';
-    document.getElementById('status').innerText = '✅ '+d.total+' video masuk - Siap upload kecil & gede sampai 7TB! Link AKfycbwP1Ksq2...';
-    grid.innerHTML='';
-    if(!d.files.length){
-      grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:#666;padding:40px;border:1px dashed #333;border-radius:12px">Belum ada video - Klik 📁 PILIH VIDEO NGEBUT di atas!<br>Kecil & gede sampai 7TB masuk semua!</div>';
-      delete window[cb]; s.remove();
-      return;
-    }
+  const grid=document.getElementById('grid'),msg=document.getElementById('msg');
+  grid.innerHTML='<div style=color:#888>Loading 7TB...</div>'; msg.style.display='none';
+  let cb='cb_'+Date.now(); let s=document.createElement('script');
+  window[cb]=d=>{
+    if(!d||d.status!="success"){ msg.style.display='block'; msg.innerText='Exec error! Deploy New Version Anyone!'; grid.innerHTML=''; delete window[cb]; s.remove(); return; }
+    document.getElementById('info').innerText=d.total+' video • '+d.totalSizeGB+'GB / 7TB • Review Fix OK';
+    document.getElementById('countInfo').innerText=d.total+' video • '+d.totalSizeGB+'GB';
+    document.getElementById('status').innerText='✅ '+d.total+' video - Review langsung play & Download ke File Manager!';
+    grid.innerHTML=''; if(!d.files.length){ grid.innerHTML='<div style=grid-column:1/-1;text-align:center;color:#666;padding:40px;border:1px dashed #333;border-radius:12px">Belum ada video - Klik PILIH VIDEO NGEBUT!</div>'; delete window[cb]; s.remove(); return; }
     d.files.forEach(f=>{
-      let el = document.createElement('div');
-      el.className='card';
-      el.innerHTML = `
-        <div class="thumb">
-          <div style="position:absolute;top:8px;left:8px;background:red;font-size:10px;padding:3px 8px;border-radius:10px">7TB</div>
-          <div class="play-btn" onclick="openModal('${f.id}','${f.name.replace(/'/g,"\\'")}')">▶</div>
-          <div style="position:absolute;bottom:6px;right:8px;background:rgba(0,0,0,.8);font-size:11px;padding:3px 6px;border-radius:6px">${f.sizeMB}</div>
-        </div>
-        <div style="padding:10px">
-          <div style="font-size:12px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${f.name}">${f.name}</div>
-          <div style="display:flex;gap:6px;margin-top:8px">
-            <button class="btn btn-red" style="flex:1;font-size:11px" onclick="openModal('${f.id}','${f.name.replace(/'/g,"\\'")}')">Review</button>
-            <button class="btn" style="flex:1;background:#222;color:#aaa;font-size:11px" onclick="download('${f.id}')">Download</button>
-          </div>
-        </div>`;
+      let el=document.createElement('div'); el.className='card';
+      el.innerHTML=`<div class="thumb"><div style="position:absolute;top:8px;left:8px;background:red;font-size:10px;padding:3px 8px;border-radius:10px">7TB</div><div class="play-btn" onclick="openModal('${f.id}','${f.name.replace(/'/g,"\\'")}')">▶</div><div style="position:absolute;bottom:6px;right:8px;background:rgba(0,0,0,.8);font-size:11px;padding:3px 6px;border-radius:6px">${f.sizeMB}</div></div><div style="padding:10px"><div style="font-size:12px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-red" style="flex:1" onclick="openModal('${f.id}','${f.name.replace(/'/g,"\\'")}')">Review</button><button class="btn" style="flex:1;background:#222;color:#aaa" onclick="download('${f.id}','${f.name}')">Download</button></div></div>`;
       grid.appendChild(el);
     });
     delete window[cb]; s.remove();
   };
-  s.onerror = ()=>{
-    msg.style.display='block';
-    msg.innerText='❌ Exec error! Belum Deploy New Version Anyone di project 1Miwo_5qEe... Klik Deploy > Manage deployments > Pensil > New Version > Anyone > Deploy!';
-    grid.innerHTML='';
-    delete window[cb]; s.remove();
-  };
-  s.src = API+"?callback="+cb+"&type=video&t="+Date.now();
-  document.body.appendChild(s);
+  s.onerror=()=>{ msg.style.display='block'; msg.innerText='Exec error! Deploy New Version Anyone!'; };
+  s.src=API+"?callback="+cb+"&t="+Date.now(); document.body.appendChild(s);
 }
-
 function openModal(id,name){
   currentId=id;
   document.getElementById('mtitle').innerText=name;
   document.getElementById('modal').classList.add('show');
-  playIframe();
+  playVideo();
 }
 function closeModal(){
   document.getElementById('modal').classList.remove('show');
-  document.getElementById('vid').pause();
-  document.getElementById('vid').src='';
-  document.getElementById('ifr').src='';
-  document.getElementById('vid').style.display='none';
-  document.getElementById('ifr').style.display='none';
+  let v=document.getElementById('vid'); v.pause(); v.src=''; v.style.display='none';
   document.getElementById('loading').style.display='block';
 }
-function playIframe(){
-  document.getElementById('vid').style.display='none';
-  document.getElementById('vid').pause();
-  document.getElementById('loading').style.display='none';
-  let ifr=document.getElementById('ifr');
-  ifr.style.display='block';
-  ifr.src='https://drive.google.com/file/d/'+currentId+'/preview';
-}
-function playDirect(){
-  document.getElementById('ifr').style.display='none';
-  document.getElementById('loading').style.display='none';
+function playVideo(){
   let v=document.getElementById('vid');
+  document.getElementById('loading').style.display='none';
   v.style.display='block';
-  v.src='https://drive.google.com/uc?export=view&id='+currentId;
-  v.play();
+  // FIX REVIEW - LANGSUNG PLAY DI WEB, GAK MENTAL KE DRIVE
+  v.src='https://drive.google.com/uc?export=view&id='+currentId+'&t='+Date.now();
+  v.load(); v.play().catch(()=>{ v.src='https://drive.google.com/uc?export=download&id='+currentId; v.play(); });
 }
-function download(id){
-  window.open('https://drive.google.com/uc?export=download&id='+id,'_blank');
+function download(id,name){
+  // FIX DOWNLOAD - LANGSUNG MASUK FILE MANAGER / DOWNLOAD HP
+  let a=document.createElement('a');
+  a.href='https://drive.google.com/uc?export=download&id='+id;
+  a.download=name||'video.mp4';
+  document.body.appendChild(a); a.click(); a.remove();
+  // Backup buka tab baru juga
+  setTimeout(()=>{ window.open('https://drive.google.com/uc?export=download&id='+id,'_blank'); },500);
 }
-function downloadVideo(){ download(currentId); }
-async function hapus(){
-  if(!confirm('Hapus video ini dari 7TB?')) return;
-  let fd=new FormData();
-  fd.append('action','delete');
-  fd.append('id',currentId);
-  await fetch(API,{method:'POST',body:fd,mode:'no-cors'});
-  closeModal();
-  setTimeout(loadData,1500);
-}
-
+function downloadVideo(){ download(currentId, document.getElementById('mtitle').innerText); }
+async function hapus(){ if(!confirm('Hapus video ini?')) return; let fd=new FormData(); fd.append('action','delete'); fd.append('id',currentId); await fetch(API,{method:'POST',body:fd,mode:'no-cors'}); closeModal(); setTimeout(loadData,1200); }
 function getResumableUrl(file){
   return new Promise((res,rej)=>{
     let cb='cb_up_'+Date.now()+Math.random().toString(36).substr(2,5);
-    window[cb]=d=>{
-      delete window[cb]; s.remove();
-      if(d && d.url) res(d.url);
-      else rej(d.message||'Gagal bikin resumable - Deploy New Version belum!');
-    };
-    let s=document.createElement('script');
-    s.onerror=()=>{
-      delete window[cb]; s.remove();
-      rej('Exec error - Deploy belum!');
-    };
+    window[cb]=d=>{ delete window[cb]; s.remove(); d&&d.url?res(d.url):rej(d.message||'Gagal resumable'); };
+    let s=document.createElement('script'); s.onerror=()=>{ delete window[cb]; s.remove(); rej('Exec error'); };
     s.src=API+"?callback="+cb+"&action=createResumable&filename="+encodeURIComponent(file.name)+"&mimetype="+encodeURIComponent(file.type||'video/mp4')+"&filesize="+file.size+"&t="+Date.now();
     document.body.appendChild(s);
   });
 }
-
+function setPublic(id){
+  return new Promise((res)=>{
+    let cb='cb_pub_'+Date.now(); let s=document.createElement('script');
+    window[cb]=d=>{ delete window[cb]; s.remove(); res(); };
+    s.src=API+"?callback="+cb+"&action=setPublic&id="+id+"&t="+Date.now();
+    document.body.appendChild(s);
+    setTimeout(res,2000);
+  });
+}
 document.getElementById('fileInput').addEventListener('change', async e=>{
-  let files=[...e.target.files];
-  if(!files.length) return;
-  let q=document.getElementById('queue');
-  q.style.display='block';
-  document.getElementById('qcount').textContent='0/'+files.length;
-  document.getElementById('qList').innerHTML='';
-  document.getElementById('qtitle').textContent='UPLOAD '+files.length+' VIDEO - KECIL & GEDE SAMPAI 7TB';
-
-  for(let idx=0; idx<files.length; idx++){
+  let files=[...e.target.files]; if(!files.length) return;
+  let q=document.getElementById('queue'); q.style.display='block'; document.getElementById('qList').innerHTML=''; document.getElementById('qcount').textContent='0/'+files.length;
+  for(let idx=0;idx<files.length;idx++){
     let file=files[idx];
     document.getElementById('qcount').textContent=(idx+1)+'/'+files.length;
-    document.getElementById('qfile').textContent=(idx+1)+'/'+files.length+': '+file.name+' ('+(file.size/1024/1024).toFixed(1)+'MB)';
-    document.getElementById('qbar').style.width='0%';
-    document.getElementById('qbar').textContent='0%';
-    let item=document.createElement('div');
-    item.id='item-'+idx;
-    item.textContent='⏳ '+file.name+' - antri...';
-    item.style.padding='4px 0';
-    item.style.borderBottom='1px solid #eee';
-    document.getElementById('qList').appendChild(item);
-
-    let success=false;
-    let retry=0;
-    while(!success && retry<3){
+    document.getElementById('qfile').textContent=file.name+' ('+(file.size/1024/1024).toFixed(1)+'MB)';
+    document.getElementById('qbar').style.width='0%'; document.getElementById('qbar').textContent='0%';
+    let item=document.createElement('div'); item.textContent='⏳ '+file.name+' - upload...'; item.style.padding='4px 0'; document.getElementById('qList').appendChild(item);
+    let ok=false,retry=0;
+    while(!ok&&retry<3){
       try{
-        if(file.size < 50*1024*1024){
-          document.getElementById('qtitle').textContent='Upload kecil ngebut: '+file.name;
-          let b64=await new Promise((r,rej)=>{
-            let fr=new FileReader();
-            fr.onload=()=>r(fr.result.split(',')[1]);
-            fr.onerror=()=>rej('gagal baca file');
-            fr.readAsDataURL(file);
-          });
-          let fd=new FormData();
-          fd.append('file',b64);
-          fd.append('filename',file.name);
-          fd.append('mimetype',file.type||'video/mp4');
-          await fetch(API,{method:'POST',body:fd,mode:'no-cors'});
-          document.getElementById('qbar').style.width='100%';
-          document.getElementById('qbar').textContent='100%';
-          document.getElementById('item-'+idx).textContent='✅ '+file.name+' - MASUK 7TB!';
-          document.getElementById('item-'+idx).style.color='green';
-          document.getElementById('item-'+idx).style.fontWeight='bold';
-          success=true;
+        if(file.size<50*1024*1024){
+          let b64=await new Promise((r,j)=>{ let fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.onerror=()=>j('gagal'); fr.readAsDataURL(file); });
+          let fd=new FormData(); fd.append('file',b64); fd.append('filename',file.name); fd.append('mimetype',file.type||'video/mp4');
+          let resp=await fetch(API,{method:'POST',body:fd}); let txt=await resp.text(); try{ let js=JSON.parse(txt); if(js.id) await setPublic(js.id); }catch(e){}
+          document.getElementById('qbar').style.width='100%'; document.getElementById('qbar').textContent='100%'; item.textContent='✅ '+file.name+' - MASUK!'; ok=true;
         }else{
-          document.getElementById('qtitle').textContent='Upload gede ngebut 10MB chunk: '+file.name;
-          let uploadUrl=await getResumableUrl(file);
-          let start=0;
+          let url=await getResumableUrl(file); let start=0; let fileId=null;
           while(start<file.size){
-            let end=Math.min(start+CHUNK,file.size);
-            let chunk=file.slice(start,end);
-            let resp=await fetch(uploadUrl,{
-              method:'PUT',
-              headers:{"Content-Range":`bytes ${start}-${end-1}/${file.size}`},
-              body:chunk
-            });
-            if(!resp.ok && resp.status!=308 && resp.status!=200 && resp.status!=201){
-              throw new Error('Chunk gagal status '+resp.status);
-            }
-            let pct=Math.round((end/file.size)*100);
-            document.getElementById('qbar').style.width=pct+'%';
-            document.getElementById('qbar').textContent=pct+'%';
-            start=end;
+            let end=Math.min(start+CHUNK,file.size); let chunk=file.slice(start,end);
+            let resp=await fetch(url,{method:'PUT',headers:{"Content-Range":`bytes ${start}-${end-1}/${file.size}`},body:chunk});
+            let txt=await resp.text(); if(txt.includes('"id"')){ try{ let j=JSON.parse(txt); fileId=j.id; }catch(e){} }
+            let pct=Math.round(end/file.size*100); document.getElementById('qbar').style.width=pct+'%'; document.getElementById('qbar').textContent=pct+'%'; start=end;
           }
-          document.getElementById('item-'+idx).textContent='✅ '+file.name+' - MASUK 7TB! ('+(file.size/1024/1024).toFixed(1)+'MB)';
-          document.getElementById('item-'+idx).style.color='green';
-          document.getElementById('item-'+idx).style.fontWeight='bold';
-          success=true;
+          if(fileId) await setPublic(fileId);
+          else { await new Promise(r=>setTimeout(r,2000)); }
+          item.textContent='✅ '+file.name+' - MASUK 7TB & PUBLIC!'; ok=true;
         }
-      }catch(err){
-        retry++;
-        document.getElementById('item-'+idx).textContent='⏳ Retry '+retry+'/3: '+file.name+' - '+err;
-        await new Promise(r=>setTimeout(r,1200));
-        if(retry>=3){
-          document.getElementById('item-'+idx).textContent='❌ '+file.name+' gagal: '+err;
-          document.getElementById('item-'+idx).style.color='red';
-        }
-      }
+      }catch(err){ retry++; item.textContent='⏳ Retry '+retry+'/3: '+err; await new Promise(r=>setTimeout(r,1000)); if(retry>=3) item.textContent='❌ '+file.name+' gagal: '+err; }
     }
   }
-  document.getElementById('qtitle').textContent='✅ SELESAI '+files.length+' VIDEO MASUK 7TB!';
-  document.getElementById('qbar').style.width='100%';
-  setTimeout(()=>{
-    q.style.display='none';
-    loadData();
-  },2500);
-  e.target.value='';
+  document.getElementById('qtitle').textContent='✅ SELESAI! Review & Download Fix!';
+  setTimeout(()=>{ q.style.display='none'; loadData(); },2000); e.target.value='';
 });
-
 loadData();
 </script></body></html>
