@@ -1,43 +1,107 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DASHBOARD FOTO 7TB - BALIK AWAL LINK VIDEO</title>
+<title>DASHBOARD FOTO 7TB - ADA UPLOAD + LINK VIDEO</title>
 <style>
 body{font-family:Arial;background:#f5f7ff;margin:0}
-.header{background:white;padding:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.1);position:sticky;top:0}
-.btn{padding:10px 16px;border:none;border-radius:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+.header{background:white;padding:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.1);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
+.btn{padding:10px 16px;border:none;border-radius:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;font-size:12px}
 .btn-foto{background:#4f46e5;color:white}
 .btn-video{background:#ef4444;color:white}
+.btn-login{background:#222;color:white;border:1px solid #ddd}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:16px}
 .card{background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.08)}
 .card img{width:100%;height:160px;object-fit:cover;background:#eee}
-.card-body{padding:8px;font-size:11px}
-.badge{background:#dcfce7;color:#166534;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800}
+#dropZone{border:3px dashed #4f46e5;background:white;padding:28px;border-radius:16px;margin:16px;text-align:center;cursor:pointer}
+#queue{display:none;background:white;padding:14px;border-radius:12px;margin:16px;border:2px solid #4f46e5;position:sticky;top:70px;z-index:90}
+.bar{height:24px;background:#eee;border-radius:10px;overflow:hidden;margin-top:8px}.bar-inner{height:24px;background:#4f46e5;width:0%;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold}
 </style></head><body>
 <div class="header">
-<div><b>📁 DASHBOARD FOTO 7TB - BALIK AWAL</b><br><small id="info">Folder: 19ayHScf247HSyicBp5H3IEkrJa_KhUif - Memuat foto balik lagi... <span class="badge">ANTI HILANG</span></small></div>
-<div style="display:flex;gap:8px">
-<button class="btn btn-foto" onclick="loadFoto()">🔄 Reload Foto</button>
+<div><b>📁 DASHBOARD FOTO 7TB - BALIK AWAL</b><br><small id="info">Folder: 19ayHScf247HSyicBp5H3IEkrJa_KhUif - Memuat... </small></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<label for="fileInput" id="uploadLabel" class="btn btn-foto" style="padding:12px 20px;cursor:pointer;background:#4f46e5;color:white">📷 PILIH FOTO BANYAK</label>
+<button class="btn" onclick="loadFoto()" style="background:#eee">🔄 Reload</button>
 <a href="video.html" class="btn btn-video">📹 VIDEO 7TB →</a>
+<a href="index.html" class="btn btn-login">🔐 Login</a>
+</div>
+<input type="file" id="fileInput" multiple accept="image/*" style="position:absolute;left:-9999px">
+</div>
+
+<div id="dropZone" onclick="document.getElementById('fileInput').click()">
+<div style="font-size:45px">📸</div>
+<div style="font-weight:bold;font-size:17px;margin-top:8px">KLIK ATAU SERET RIBUAN FOTO KESINI - NO LIMIT!</div>
+<div style="font-size:11px;color:#666;margin-top:6px">Bisa pilih 1000+ foto sekaligus dari File Manager HP / Laptop - Foto bakal balik kayak awal!</div>
+<div id="selectedInfo" style="margin-top:12px;background:#f5f7ff;padding:10px;border-radius:8px;font-size:12px;display:none;border:1px solid #ddd">📦 Terpilih: <b id="selCount" style="color:#4f46e5">0</b> foto • 💾 <b id="selSize">0MB</b> • Klik PILIH lagi untuk tambah!</div>
+<div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+<button id="clearBtn" class="btn" style="display:none;background:#222;color:white" onclick="clearAll()">🗑 Clear</button>
+<button id="startBtn" class="btn" style="display:none;background:#00aa00;color:white" onclick="startUpload()">▶ UPLOAD SEKARANG</button>
 </div>
 </div>
-<div id="err" style="text-align:center;padding:20px"></div>
+
+<div id="queue"><div style="display:flex;justify-content:space-between;font-weight:bold"><span id="qtitle">Upload Foto...</span><span id="qcount">0/0</span></div><div class="bar"><div id="qbar" class="bar-inner">0%</div></div><div id="qfile" style="font-size:11px;margin-top:6px;word-break:break-all"></div><div style="display:flex;gap:12px;margin-top:8px;font-size:13px"><span>✅ Masuk: <b id="qok" style="color:green">0</b></span><span>⏳ Sisa: <b id="qleft">0</b></span></div><div id="qList" style="font-size:11px;margin-top:8px;max-height:250px;overflow:auto;background:#f5f5f5;padding:8px;border-radius:8px"></div></div>
+
+<div id="err" style="text-align:center;padding:10px"></div>
 <div id="gal" class="grid"></div>
+
 <script>
 const API='https://script.google.com/macros/s/AKfycbyirGQC4UpkYWk3QWq39by0QczkNR23uBd5mLFfPYCuuEJtKGfVfFTVwTrD3N-DpV_deA/exec';
+let allFiles=[];
+
 async function loadFoto(){
- document.getElementById('info').textContent='Memuat foto dari folder awal 19ayHScf... yang ada IMG-20260822... - Link ke VIDEO ada di kanan atas';
- document.getElementById('err').innerHTML='Loading foto... Kalau lama cek <a href=https://drive.google.com/drive/folders/19ayHScf247HSyicBp5H3IEkrJa_KhUif target=_blank>Drive Folder</a> atau <a href=https://drive.google.com/drive/trash target=_blank>Trash</a>';
+ document.getElementById('info').textContent='Memuat foto dari folder awal 19ayHScf247HSyicBp5H3IEkrJa_KhUif... yang ada IMG-20260822...';
+ document.getElementById('err').innerHTML='Loading...';
  try{
   const fd=new FormData(); fd.append('action','list');
-  const r=await fetch(API,{method:'POST',body:fd}); 
-  const j=await r.json();
-  if(j.error){ document.getElementById('err').innerHTML='<div style=background:#fee2e2;color:#991b1b;padding:16px;border-radius:12px><b>'+j.message+'</b><br><br><a href=https://drive.google.com/drive/folders/19ayHScf247HSyicBp5H3IEkrJa_KhUif target=_blank>Buka Folder Foto</a> | <a href=https://drive.google.com/drive/trash target=_blank>Cek Trash - Restore</a><br><br><button class=btn onclick=loadFoto()>Coba Lagi</button></div>'; return; }
-  document.getElementById('info').innerHTML=j.totalText + ' - Foto balik lagi! <span class=badge>ANTI HILANG</span> - <a href=video.html style=color:#ef4444;font-weight:800>Lihat VIDEO 7TB →</a>';
+  const r=await fetch(API,{method:'POST',body:fd}); const j=await r.json();
+  if(j.error){ document.getElementById('err').innerHTML='<div style=background:#fee2e2;color:#991b1b;padding:16px;border-radius:12px><b>'+j.message+'</b><br><br><a href=https://drive.google.com/drive/folders/19ayHScf247HSyicBp5H3IEkrJa_KhUif target=_blank>Buka Folder</a> | <a href=https://drive.google.com/drive/trash target=_blank>Trash</a></div>'; return; }
+  document.getElementById('info').innerHTML=j.totalText + ' - Foto ada lagi! <a href=video.html style=color:#ef4444>→ VIDEO</a>';
   document.getElementById('err').innerHTML='';
   const gal=document.getElementById('gal'); gal.innerHTML='';
-  if(!j.files || j.files.length===0){ gal.innerHTML='<div style=grid-column:1/-1;text-align:center;padding:40px;color:#666">Belum ada foto - Cek Trash dan Restore foto</div>'; return; }
-  j.files.forEach(f=>{ const d=document.createElement('div'); d.className='card'; d.innerHTML='<img src='+f.thumb+' loading=lazy><div class=card-body><b title='+f.name+'>'+f.name+'</b><br>'+f.size+'<br><a href='+f.link+' target=_blank>Lihat</a> | <a href=https://drive.google.com/uc?export=download&id='+f.id+'>Download</a></div>'; gal.appendChild(d); });
- }catch(e){ document.getElementById('err').innerHTML='<b style=color:red>Error jaringan: '+e.message+'</b><br><button class=btn onclick=loadFoto()>Coba Lagi</button>'; }
+  j.files.forEach(f=>{ const d=document.createElement('div'); d.className='card'; d.innerHTML='<img src='+f.thumb+' loading=lazy><div style=padding:8px;font-size:11px><b>'+f.name+'</b><br>'+f.size+'<br><a href='+f.link+' target=_blank>Lihat</a> | <a href=https://drive.google.com/uc?export=download&id='+f.id+'>Download</a></div>'; gal.appendChild(d); });
+ }catch(e){ document.getElementById('err').textContent='Error: '+e.message; }
 }
+
+function updateSelectedInfo(){
+ if(!allFiles.length){ document.getElementById('selectedInfo').style.display='none'; document.getElementById('clearBtn').style.display='none'; document.getElementById('startBtn').style.display='none'; document.getElementById('uploadLabel').innerText='📷 PILIH FOTO BANYAK'; return; }
+ let totalSize=allFiles.reduce((a,f)=>a+f.size,0);
+ document.getElementById('selectedInfo').style.display='block';
+ document.getElementById('selCount').textContent=allFiles.length;
+ document.getElementById('selSize').textContent=(totalSize/1024/1024).toFixed(1)+'MB';
+ document.getElementById('clearBtn').style.display='inline-block';
+ document.getElementById('startBtn').style.display='inline-block';
+ document.getElementById('uploadLabel').innerText='📷 TAMBAH LAGI ('+allFiles.length+')';
+}
+function clearAll(){ allFiles=[]; updateSelectedInfo(); document.getElementById('fileInput').value=''; }
+document.getElementById('fileInput').addEventListener('change', e=>{ let nf=[...e.target.files]; if(!nf.length) return; allFiles=allFiles.concat(nf); updateSelectedInfo(); e.target.value=''; });
+const dz=document.getElementById('dropZone'); dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.borderColor='#00aa00'; }); dz.addEventListener('dragleave', ()=>dz.style.borderColor='#4f46e5'); dz.addEventListener('drop', e=>{ e.preventDefault(); dz.style.borderColor='#4f46e5'; let df=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')); allFiles=allFiles.concat(df); updateSelectedInfo(); });
+
+async function startUpload(){
+ if(!allFiles.length){ alert('Pilih foto dulu!'); return; }
+ let files=[...allFiles]; allFiles=[]; updateSelectedInfo();
+ document.getElementById('queue').style.display='block';
+ document.getElementById('qcount').textContent='0/'+files.length;
+ document.getElementById('qok').textContent='0';
+ document.getElementById('qleft').textContent=files.length;
+ let totalOk=0;
+ for(let idx=0; idx<files.length; idx++){
+  let file=files[idx];
+  document.getElementById('qcount').textContent=(idx+1)+'/'+files.length;
+  document.getElementById('qfile').textContent=(idx+1)+'/'+files.length+': '+file.name;
+  document.getElementById('qleft').textContent=files.length-idx-1;
+  let item=document.createElement('div'); item.textContent='⏳ '+file.name; document.getElementById('qList').appendChild(item);
+  try{
+    let b64=await new Promise((r,j)=>{ let fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.onerror=()=>j('gagal'); fr.readAsDataURL(file); });
+    let fd=new FormData(); fd.append('file',b64); fd.append('filename',file.name); fd.append('mimetype',file.type||'image/jpeg');
+    fd.append('action','upload');
+    await fetch(API,{method:'POST',body:fd,mode:'no-cors'});
+    item.textContent='✅ '+file.name+' - MASUK!'; item.style.color='green'; totalOk++;
+  }catch(err){ item.textContent='❌ '+file.name+' GAGAL: '+err; item.style.color='red'; }
+  document.getElementById('qok').textContent=totalOk;
+  document.getElementById('qbar').style.width=Math.round((idx+1)/files.length*100)+'%';
+  document.getElementById('qbar').textContent=Math.round((idx+1)/files.length*100)+'%';
+ }
+ document.getElementById('qtitle').textContent='✅ SELESAI '+totalOk+' foto masuk!';
+ setTimeout(()=>{ document.getElementById('queue').style.display='none'; loadFoto(); },2000);
+}
+
 loadFoto();
 </script></body></html>
