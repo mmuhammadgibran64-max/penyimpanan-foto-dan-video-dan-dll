@@ -1,181 +1,36 @@
 <!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DASHBOARD FOTO 7TB - NGEBUT 1 DETIK ANTI HILANG</title>
-<script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/lucide@latest"></script>
-<style>body{font-family:sans-serif;background:#f8fafc}.grid-files{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}</style>
-<script>if(localStorage.getItem('presensi_login')!=='true'){location.href='index.html'}</script>
-</head>
-<body>
-<header class="sticky top-0 z-30 bg-white border-b p-3">
-<div class="max-w-7xl mx-auto flex justify-between items-center gap-2">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 bg-indigo-600 rounded-xl grid place-items-center text-white font-black">7TB</div>
-<div>
-<h1 class="font-black text-sm">DASHBOARD FOTO 7TB - NGEBUT</h1>
-<p class="text-xs text-slate-600"><span id="count">0</span> file • <span id="size">0GB / 7TB FOTO</span> • <span id="statusCache" class="text-emerald-600 font-bold"></span> • Link Baru Pisah</p>
-<div class="w-56 bg-slate-200 h-2 rounded-full mt-1"><div id="storageBar" class="bg-indigo-600 h-2 rounded-full w-0 transition-all"></div></div>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DASHBOARD FOTO BALIK AWAL</title>
+<style>
+body{font-family:Arial;background:#f5f7ff;margin:0}
+.header{background:white;padding:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.btn{padding:10px 16px;border:none;border-radius:12px;font-weight:700;cursor:pointer}
+.btn-foto{background:#4f46e5;color:white}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;padding:16px}
+.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.card img{width:100%;height:150px;object-fit:cover}
+.card-body{padding:8px;font-size:11px}
+.error{background:#fee2e2;color:#991b1b;padding:20px;margin:16px;border-radius:12px;text-align:center}
+</style></head><body>
+<div class="header">
+<div><b>📁 FOTO BALIK AWAL - 19ayHScf...</b><br><small id="info">Memuat...</small></div>
+<div><button class="btn btn-foto" onclick="loadFoto(true)">🔄 Reload Foto</button> <button class="btn" onclick="clearCache()">Clear Cache</button></div>
 </div>
-</div>
-<div class="flex items-center gap-2">
-<input type="file" id="fileInput" multiple hidden accept="image/*">
-<button id="btnPick" class="bg-indigo-600 text-white px-4 py-3 rounded-xl font-bold text-xs">📸 PILIH FOTO BANYAK</button>
-<button onclick="load(true)" class="bg-white border p-3 rounded-xl" title="Force Refresh"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
-<a href="video.html" class="bg-red-600 text-white p-3 rounded-xl border-2 border-red-300 shadow-lg flex items-center gap-1"><i data-lucide="video" class="w-5 h-5"></i><span class="text-xs font-black">VIDEO 7TB</span></a>
-<button onclick="logout()" class="bg-rose-50 text-rose-600 border px-3 py-3 rounded-xl font-bold text-xs">Keluar</button>
-</div>
-</div>
-<div id="infoPisah" class="max-w-7xl mx-auto mt-3 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-3 flex justify-between items-center">
-<div><p class="font-black text-xs text-white">🔥 DASHBOARD FOTO NGEBUT 1 DETIK - ANTI HILANG!</p><p class="text-xs mt-1 text-white/80">AKfycbyirGQC4Upk.../exec - CACHE 5 MENIT - Foto aman nggak bakal kehapus!</p></div>
-<div class="flex gap-2"><button onclick="clearCache()" class="bg-white/20 text-white px-3 py-1 rounded-full text-xs">Clear Cache</button><a href="video.html" class="bg-white text-black px-3 py-1 rounded-full text-xs font-bold">VIDEO →</a></div>
-</div>
-<div id="queue" class="max-w-7xl mx-auto mt-3 hidden">
-<div class="bg-slate-900 text-white rounded-2xl p-4 border-2 border-emerald-400">
-<div class="flex justify-between"><p id="qtitle" class="font-black text-sm">Upload Foto...</p><p id="qcounter" class="text-xs bg-white/20 px-2 py-1 rounded-full">0/0</p></div>
-<div class="w-full bg-white/20 h-4 rounded-full mt-3 overflow-hidden"><div id="qbar" class="bg-emerald-400 h-4 rounded-full w-0 text-xs font-bold grid place-items-center text-black transition-all">0%</div></div>
-<p id="qfile" class="text-xs mt-2 truncate font-bold text-emerald-300"></p>
-<div id="qList" class="mt-2 max-h-32 overflow-y-auto text-xs bg-black/30 rounded-xl p-2"></div>
-</div>
-</div>
-</header>
-<main class="max-w-7xl mx-auto p-3">
-<div class="bg-blue-50 border border-blue-200 rounded-2xl p-3 mb-3 flex justify-between items-center">
-<p class="text-xs font-bold text-blue-700">📸 FOTO 7TB PISAH - NGEBUT CACHE - Refresh cuma 1 detik! Video ada di VIDEO 7TB terpisah</p>
-<span id="loadTime" class="text-xs bg-white px-2 py-1 rounded-full">0s</span>
-</div>
-<div id="grid" class="grid-files"></div>
-<div id="load" class="py-20 text-center"><p class="text-sm font-bold">Loading FOTO 7TB Ngebut...</p><p class="text-xs text-slate-400 mt-1">CACHE 1 DETIK - Anti Hilang</p></div>
-</main>
-<div id="modal" class="fixed inset-0 z-50 hidden bg-black/80 grid place-items-center p-4">
-<div class="bg-white rounded-2xl max-w-3xl w-full overflow-hidden">
-<div class="p-3 flex justify-between border-b"><p id="modalName" class="font-bold text-sm truncate"></p><button onclick="closeModal()" class="bg-slate-100 p-2 rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button></div>
-<div class="p-3">
-<img id="modalImg" class="w-full max-h-[70vh] object-contain bg-slate-100 rounded-xl hidden">
-<div class="flex gap-2 mt-3">
-<button onclick="downloadViaScript(currentModalId)" class="bg-indigo-600 text-white px-4 py-2 rounded-full text-xs font-bold">Download</button>
-<button class="bg-slate-100 text-slate-400 px-4 py-2 rounded-full text-xs font-bold cursor-not-allowed" title="Delete dimatikan biar foto nggak hilang">⛔ Hapus Dimatikan - Anti Hilang</button>
-</div>
-</div>
-</div>
-</div>
+<div id="err"></div>
+<div id="gal" class="grid"></div>
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbyirGQC4UpkYWk3QWq39by0QczkNR23uBd5mLFfPYCuuEJtKGfVfFTVwTrD3N-DpV_deA/exec";
-let allFiles=[]; let currentModalId=null;
-let startTime = 0;
-
-function clearCache(){
-  localStorage.removeItem('foto_cache_7tb');
-  localStorage.removeItem('foto_cache_time');
-  alert('Cache dibersihkan! Refresh bakal baca ulang dari Drive (agak lama dikit)');
-  load(true);
+const API='https://script.google.com/macros/s/AKfycbyirGQC4UpkYWk3QWq39by0QczkNR23uBd5mLFfPYCuuEJtKGfVfFTVwTrD3N-DpV_deA/exec';
+async function loadFoto(force){
+ document.getElementById('info').textContent= force?'Force reload...':'Memuat foto dari 19ayHScf247HSyicBp5H3IEkrJa_KhUif...';
+ try{
+  const fd=new FormData(); fd.append('action','list'); if(force) fd.append('force','1');
+  const r=await fetch(API,{method:'POST',body:fd}); const j=await r.json();
+  if(j.error){ document.getElementById('err').innerHTML='<div class=error>Gagal: '+j.message+'<br><br>Folder yang dicoba: '+ (j.folderTried||j.folderIdUsed||'19ayHScf247HSyicBp5H3IEkrJa_KhUif') +'<br><br><button onclick=loadFoto(true)>Coba Lagi</button></div>'; return; }
+  document.getElementById('err').innerHTML=''; document.getElementById('info').textContent=j.totalText + ' - ' + (j.fromCache?'⚡ CACHE':'✅ DRIVE');
+  const gal=document.getElementById('gal'); gal.innerHTML='';
+  j.files.forEach(f=>{ const d=document.createElement('div'); d.className='card'; d.innerHTML='<img src='+f.thumb+'><div class=card-body><b>'+f.name+'</b><br>'+f.size+'<br><a href='+f.link+' target=_blank>Lihat</a> | <a href=https://drive.google.com/uc?export=download&id='+f.id+'>Download</a></div>'; gal.appendChild(d); });
+ }catch(e){ document.getElementById('err').innerHTML='<div class=error>Error jaringan: '+e.message+'</div>'; }
 }
-
-async function load(force=false){
-  startTime = Date.now();
-  const grid = document.getElementById('grid');
-  const loadEl = document.getElementById('load');
-  const statusCache = document.getElementById('statusCache');
-  
-  // 1. TAMPILKAN DARI LOCALSTORAGE DULU - 0 DETIK
-  const cached = localStorage.getItem('foto_cache_7tb');
-  const cacheTime = localStorage.getItem('foto_cache_time');
-  if(cached && !force){
-    try{
-      const data = JSON.parse(cached);
-      const age = cacheTime ? Math.floor((Date.now() - parseInt(cacheTime))/1000) : 0;
-      renderFiles(data.files, data.total, data.totalSizeGB, true, age);
-      statusCache.textContent = "⚡ CACHE " + age + " detik lalu - NGEBUT 1 DETIK";
-      loadEl.classList.add('hidden');
-    }catch(e){}
-  } else {
-    loadEl.classList.remove('hidden');
-    statusCache.textContent = force ? "🔄 FORCE REFRESH DARI DRIVE..." : "⏳ Loading dari Drive...";
-  }
-  
-  // 2. FETCH BARU DI BELAKANG LAYAR - PAKAI FETCH POST, BUKAN JSONP LEMOT
-  try{
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify({action:'list', force: force})
-    });
-    const text = await res.text();
-    if(text.trim().startsWith('<')){
-      throw new Error('GS masih private atau belum deploy');
-    }
-    const data = JSON.parse(text);
-    if(data.error){
-      throw new Error(data.message);
-    }
-    
-    // Simpen ke localStorage
-    localStorage.setItem('foto_cache_7tb', JSON.stringify(data));
-    localStorage.setItem('foto_cache_time', Date.now().toString());
-    
-    const loadTime = ((Date.now() - startTime)/1000).toFixed(1);
-    document.getElementById('loadTime').textContent = loadTime + 's' + (data.fromCache ? ' (CACHE)' : ' (DRIVE)');
-    statusCache.textContent = data.fromCache ? "⚡ CACHE 1 DETIK - " + data.total + " foto" : "✅ DRIVE - " + data.total + " foto - Disimpen ke cache 5 menit";
-    
-    renderFiles(data.files, data.total, data.totalSizeGB, false, 0);
-    loadEl.classList.add('hidden');
-    
-  }catch(err){
-    loadEl.classList.add('hidden');
-    statusCache.textContent = "❌ Error: " + err.message;
-    if(!cached){
-      grid.innerHTML = '<p class="col-span-full text-center py-10 text-sm">Gagal load: ' + err.message + '<br><button onclick="load(true)" class="mt-3 bg-indigo-600 text-white px-4 py-2 rounded-full">Coba Lagi</button></p>';
-    }
-  }
-  lucide.createIcons();
-}
-
-function renderFiles(files, total, sizeGB, fromLocal, age){
-  document.getElementById('count').textContent = total || files.length;
-  document.getElementById('size').textContent = (sizeGB || '0') + 'GB / 7TB FOTO';
-  document.getElementById('storageBar').style.width = Math.min((total/10000)*100,100) + '%';
-  
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  if(!files.length){
-    grid.innerHTML = '<p class="col-span-full text-center py-10 text-sm text-slate-400">Belum ada foto - upload foto banyak via tombol di atas! Anti hilang!</p>';
-    return;
-  }
-  allFiles = files;
-  files.forEach(f=>{
-    let el=document.createElement('div'); el.className='bg-white rounded-2xl border overflow-hidden hover:border-indigo-500/50';
-    let thumb = f.thumb || `https://drive.google.com/thumbnail?id=${f.id}&sz=w400`;
-    el.innerHTML=`<div onclick="openModal('${f.id}')" class="h-36 bg-slate-100 grid place-items-center overflow-hidden relative cursor-pointer"><img src="${thumb}" loading="lazy" class="w-full h-full object-cover"><div class="absolute top-1 left-1 bg-indigo-600 text-white text-[10px] px-2 py-1 rounded-full font-bold">${fromLocal ? 'CACHE' : 'FOTO 7TB'}</div></div><div class="p-2.5"><p class="text-xs font-bold truncate">${f.name}</p><p class="text-[11px] text-slate-400">${f.size} • ${f.folder||'FOTO 7TB'}</p><div class="flex gap-1 mt-2"><button onclick="openModal('${f.id}')" class="bg-indigo-600 text-white text-[11px] px-2.5 py-1 rounded-full font-bold flex-1">Lihat</button><button onclick="downloadViaScript('${f.id}')" class="bg-white border text-[11px] px-2.5 py-1 rounded-full font-bold flex-1">Download</button></div></div>`;
-    grid.appendChild(el);
-  });
-}
-
-function downloadViaScript(id){
-  let f=allFiles.find(x=>x.id==id); if(!f) return;
-  window.open(`https://drive.google.com/uc?export=download&id=${id}`,'_blank');
-}
-function openModal(id){
-  currentModalId=id;
-  let f=allFiles.find(x=>x.id==id); if(!f) return;
-  document.getElementById('modal').classList.remove('hidden');
-  document.getElementById('modalName').textContent=f.name;
-  document.getElementById('modalImg').classList.remove('hidden');
-  document.getElementById('modalImg').src=`https://drive.google.com/uc?export=view&id=${f.id}`;
-}
-function closeModal(){ document.getElementById('modal').classList.add('hidden'); }
-
-document.getElementById('btnPick').onclick=()=>document.getElementById('fileInput').click();
-document.getElementById('fileInput').addEventListener('change', async e=>{
-  let files=[...e.target.files]; if(!files.length) return;
-  alert('Upload ' + files.length + ' foto? Nanti cache auto kehapus biar foto baru langsung muncul');
-  localStorage.removeItem('foto_cache_7tb');
-  // Upload logic sama kayak sebelumnya tapi setelah selesai clear cache
-  // ... (kode upload lu yang lama tetep bisa dipakai)
-  e.target.value='';
-  setTimeout(()=>load(true),2000);
-});
-
-function logout(){ if(confirm('Keluar? Foto aman di FOTO 7TB - cache tetep kesimpen')){ localStorage.removeItem('presensi_login'); location.href='index.html'; } }
-load(false); lucide.createIcons();
-</script>
-</body>
-</html>
+function clearCache(){ localStorage.clear(); fetch(API,{method:'POST',body:new URLSearchParams({action:'clearCache'})}).then(()=>loadFoto(true)); }
+loadFoto(false);
+</script></body></html
